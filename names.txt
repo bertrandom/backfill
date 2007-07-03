@@ -10,6 +10,7 @@ Serguei Mourachov
 Paul Lloyd
 Kakul Srivastava
 Ana Zavala
+Peter Norby
 Dathan Pattishall
 Garrin Wong
 Rev. Dan Catt
@@ -25,6 +26,7 @@ Dunstan Orchard
 Gino Zahnd
 Maya Baratz
 Tara Suan Kirchner
+Gil Raphaelli
 Michelle Cardinal
 Ingrid Lestiyo
 Jude Matsalla
