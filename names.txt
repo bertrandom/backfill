@@ -12,7 +12,6 @@ Kakul Srivastava
 Ana Zavala
 Peter Norby
 Dathan Pattishall
-Garrin Wong
 Rev. Dan Catt
 Terrence Philben
 Kevin Collins
@@ -34,3 +33,4 @@ Scott Schiller
 Kevin Murphy
 Paul Hammond
 Zack Sheppard
+Richard Crowley
