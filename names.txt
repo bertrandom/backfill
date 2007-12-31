@@ -22,7 +22,6 @@ Ben Jenkins
 Simon Batistoni
 Myles Grant
 Dunstan Orchard
-Gino Zahnd
 Maya Baratz
 Tara Suan Kirchner
 Gil Raphaelli
@@ -37,3 +36,8 @@ Richard Crowley
 Daniel Bogan
 Sarah Cooper
 Becky Bochatey
+David Fusco
+Joe Mud
+Do Kim
+Emily Yiu
+Shanan Delp
