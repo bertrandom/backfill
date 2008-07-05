@@ -27,7 +27,6 @@ Scott Schiller
 Kevin Murphy
 Paul Hammond
 Zack Sheppard
-Richard Crowley
 Daniel Bogan
 Becky Bochatey
 David Fusco
@@ -44,3 +43,6 @@ Shamir Ramjan
 Kathleen Watkins
 Omar Ansari
 Nima Badiey
+Ashot Petrosian
+Sara Wood
+Ross Harmes
