@@ -1,18 +1,14 @@
-Kakul Srivastava
-Eric Costello
-Cal Henderson
-John Allspaw
-Aaron Straup Cope
-Heather Champ
-Serguei Mourachov
 Paul Lloyd
+Aaron Straup Cope
+John Allspaw
+Heather Champ
 Peter Norby
-Rev. Dan Catt
 Terrence Philben
 Kevin Collins
 Kellan Elliott-McCrea
 Manny Ventura
 Matthew Rothenberg
+Douglas Alexander
 Simon Batistoni
 Myles Grant
 Dunstan Orchard
@@ -26,9 +22,7 @@ Zack Sheppard
 Daniel Bogan
 David Fusco
 Joe Mud
-Do Kim
 Emily Yiu
-Shanan Delp
 Phil Yu
 Adrienne Bassett
 Kay Kremerskothen
@@ -36,15 +30,19 @@ Edson Soares
 Shamir Ramjan
 Omar Ansari
 Jenny Mette
-Ashot Petrosian
-Sara Wood
 Ross Harmes
 Melissa Ramos
 Timothy Denike
-Neil Kandalgaonkar
 Neil Walker
 J&eacute;r&ocirc;me Decq
 Josh Nguyen
 Phil King
+Daniel Eiba
+Fiona Miller
+Jake Pfaff
+Mike Panchenko
+Cris Stoddard
+Marssy Wong
+Chris Martin
 Stewart Butterfield
 Caterina Fake
