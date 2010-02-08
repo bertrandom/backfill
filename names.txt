@@ -1,6 +1,3 @@
-Paul Lloyd
-Aaron Straup Cope
-John Allspaw
 Heather Champ
 Peter Norby
 Terrence Philben
@@ -10,7 +7,6 @@ Manny Ventura
 Matthew Rothenberg
 Douglas Alexander
 Simon Batistoni
-Myles Grant
 Dunstan Orchard
 Tara Suan Kirchner
 Gil Raphaelli
@@ -26,7 +22,6 @@ Emily Yiu
 Phil Yu
 Adrienne Bassett
 Kay Kremerskothen
-Edson Soares
 Shamir Ramjan
 Omar Ansari
 Jenny Mette
@@ -34,7 +29,6 @@ Ross Harmes
 Melissa Ramos
 Timothy Denike
 Neil Walker
-J&eacute;r&ocirc;me Decq
 Josh Nguyen
 Phil King
 Daniel Eiba
@@ -48,5 +42,11 @@ Denise Leung
 Seth Fitzsimmons
 Cynthia Johanson
 Trevor Hartsell
+Timoni Grone
+Eric Gelinas
+Markus Spiering
+Arno Tsay
+Bertrand Fan
+Henry Lyne
 Stewart Butterfield
 Caterina Fake
