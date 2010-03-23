@@ -10,7 +10,6 @@ Simon Batistoni
 Dunstan Orchard
 Tara Suan Kirchner
 Gil Raphaelli
-Jude Matsalla
 Scott Schiller
 Kevin Murphy
 Paul Hammond
@@ -26,7 +25,6 @@ Shamir Ramjan
 Omar Ansari
 Jenny Mette
 Ross Harmes
-Melissa Ramos
 Timothy Denike
 Neil Walker
 Josh Nguyen
@@ -39,7 +37,6 @@ Cris Stoddard
 Marssy Wong
 Chris Martin
 Denise Leung
-Seth Fitzsimmons
 Cynthia Johanson
 Trevor Hartsell
 Timoni Grone
@@ -48,5 +45,7 @@ Markus Spiering
 Arno Tsay
 Bertrand Fan
 Henry Lyne
+Scott Navarro
+Larissa Zimberoff
 Stewart Butterfield
 Caterina Fake
