@@ -1,14 +1,13 @@
 Peter Norby
 Terrence Philben
 Kevin Collins
-Kellan Elliott-McCrea
 Manny Ventura
 Matthew Rothenberg
 Douglas Alexander
 Simon Batistoni
 Dunstan Orchard
 Tara Suan Kirchner
-Gil Raphaelli
+Gilad Raphaelli
 Scott Schiller
 Kevin Murphy
 Zack Sheppard
@@ -20,7 +19,6 @@ Phil Yu
 Adrienne Bassett
 Kay Kremerskothen
 Shamir Ramjan
-Omar Ansari
 Jenny Mette
 Ross Harmes
 Timothy Denike
@@ -40,7 +38,7 @@ Trevor Hartsell
 Timoni Grone
 Eric Gelinas
 Markus Spiering
-Arno Tsay
+Arno Tsay Jr.
 Bertrand Fan
 Henry Lyne
 Scott Navarro
@@ -52,5 +50,5 @@ Nolan Caudill
 Alexander Kabanov
 Cathryn Weems
 Maggie Nelson
-Stewart Butterfield
-Caterina Fake
+Phillip Moore
+Mike Deerkoski
