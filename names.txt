@@ -3,7 +3,6 @@ Terrence Philben
 Kevin Collins
 Manny Ventura
 Matthew Rothenberg
-Douglas Alexander
 Simon Batistoni
 Dunstan Orchard
 Tara Suan Kirchner
@@ -28,14 +27,13 @@ Phil King
 Daniel Eiba
 Fiona Miller
 Jake Pfaff
-Mike Panchenko
 Cris Stoddard
 Marssy Wong
 Chris Martin
 Denise Leung
 Cynthia Johanson
 Trevor Hartsell
-Timoni Grone
+Timoni West
 Eric Gelinas
 Markus Spiering
 Arno Tsay Jr.
@@ -52,3 +50,8 @@ Cathryn Weems
 Maggie Nelson
 Phillip Moore
 Mike Deerkoski
+Asher Feldman
+Bridget Lewis
+Paul Mison
+Eric Han
+Chris Berry
