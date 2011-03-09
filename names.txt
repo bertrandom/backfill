@@ -1,37 +1,26 @@
 Peter Norby
 Terrence Philben
-Kevin Collins
 Manny Ventura
 Matthew Rothenberg
 Simon Batistoni
-Dunstan Orchard
-Tara Suan Kirchner
 Gilad Raphaelli
 Scott Schiller
-Kevin Murphy
 Zack Sheppard
 Daniel Bogan
 David Fusco
-Joe Mud
 Emily Yiu
 Phil Yu
-Adrienne Bassett
 Kay Kremerskothen
-Shamir Ramjan
 Jenny Mette
 Ross Harmes
 Timothy Denike
 Neil Walker
-Josh Nguyen
 Phil King
 Daniel Eiba
 Fiona Miller
 Jake Pfaff
-Cris Stoddard
 Marssy Wong
-Chris Martin
 Denise Leung
-Cynthia Johanson
 Trevor Hartsell
 Timoni West
 Eric Gelinas
@@ -39,11 +28,8 @@ Markus Spiering
 Arno Tsay Jr.
 Bertrand Fan
 Henry Lyne
-Scott Navarro
-Larissa Zimberoff
 Stephen Woods
 Jamal Fanaian
-Jenn Vargas
 Nolan Caudill
 Alexander Kabanov
 Cathryn Weems
@@ -55,3 +41,5 @@ Bridget Lewis
 Paul Mison
 Eric Han
 Chris Berry
+Sergey Morozov
+Steven Loyd
