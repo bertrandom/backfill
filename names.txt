@@ -1,8 +1,6 @@
 Peter Norby
 Terrence Philben
 Manny Ventura
-Matthew Rothenberg
-Simon Batistoni
 Gilad Raphaelli
 Scott Schiller
 Zack Sheppard
