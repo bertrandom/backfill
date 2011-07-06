@@ -24,7 +24,6 @@ Timoni West
 Eric Gelinas
 Markus Spiering
 Arno Tsay Jr.
-Bertrand Fan
 Henry Lyne
 Stephen Woods
 Jamal Fanaian
@@ -44,3 +43,4 @@ Vidur Murali
 Tim Miller
 Brad Peralta
 Ginny Hung
+Ben Freeman
