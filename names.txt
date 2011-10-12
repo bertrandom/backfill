@@ -28,13 +28,13 @@ Stephen Woods
 Jamal Fanaian
 Nolan Caudill
 Cathryn Weems
-Maggie Nelson
 Phillip Moore
 Mike Deerkoski
 Bridget Lewis
 Chris Berry
 Sergey Morozov
 Steven Loyd
+Cindy Li
 Michael Panoff
 Tim Miller
 Brad Peralta
@@ -44,3 +44,5 @@ Matt Jennings
 Peter Welch
 Nick Rettinghouse
 Phil Dokas
+Hugo Haas
+Marc Perry
