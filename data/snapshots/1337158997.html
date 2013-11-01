@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="fr-fr">
+<head>
+
+<script type="text/javascript" src="/static/js/analytics.js" ></script>
+<link type="text/css" rel="stylesheet" href="/static/css/banner-styles.css"/>
+
+
+
+
+
+	<title>À propos de Flickr</title>
+
+	<script data-script-purpose="page_timing">
+	 var farm_timing = {}; farm_timing.page_start = new Date().getTime();
+	</script>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="description" content="Flickr est certainement le meilleur service de gestion et de partage de photos en ligne au monde. Exposez vos photos préférées au monde entier. Partagez, en toute sécurité et en toute confidentialité, vos photos à vos amis et à votre famille. Et publiez les photos de votre mobile sur un blog.">
+	<meta http-equiv="imagetoolbar" content="no">
+	<link href="/web/20120516090317/http://www.flickr.com/apple-touch-icon.png" rel="apple-touch-icon-precomposed">
+
+
+	<meta name="viewport" content="width=1036">
+	<script>
+		
+	F = window.F || {};
+	
+		(function(F){var TIMEOUT=10000;var pollers={},cachedEls={},support={nativeTrim:typeof String.prototype.trim==='function',classList:'classList'in document.createElement('div')};F.util={trim:function(str){if(support.nativeTrim){return str.trim();} else{return str.replace(/^\s+|\s+$/g,'');}},getElementById:function(id){if(!cachedEls[id]){cachedEls[id]=document.getElementById(id);} return cachedEls[id];},hasClass:function(el,className){if(support.classList){return el.classList.contains(className);} else{var re=new RegExp('(?:^|\\s+)'+className+'(?:\\s+|$)');return re.test(el.className);}},addClass:function(el,className){if(support.classList){el.classList.add(className);} else if(!F.util.hasClass(el,className)){el.className=F.util.trim([el.className,className].join(' '));}},removeClass:function(el,className){if(support.classList){el.classList.remove(className);} else if(className&&F.util.hasClass(el,className)){el.className=F.util.trim(el.className.replace(new RegExp('(?:^|\\s+)'+className+'(?:\\s+|$)'),' '));if(F.util.hasClass(el,className)){F.util.removeClass(el,className);}}},whenElementExists:function(id,callback,interval){var iterations=0;interval=interval||10;var checkElementAndCallback=function(){var el=(id==='body')?document.body:F.util.getElementById(id);if(el){clearInterval(pollers[id]);callback(el);return true;} else if(++iterations*interval>=TIMEOUT){clearInterval(pollers[id]);return false;}};if(!checkElementAndCallback()){pollers[id]=setInterval(checkElementAndCallback,interval);}},addListener:function(el,type,fn,capture){if(el.addEventListener){el.addEventListener(type,fn,capture);} else if(el.attachEvent){el.attachEvent('on'+type,fn);}},setCookie:function(name,value,days,path){var date,expires='',path=path||'/';if(days){date=new Date();date.setTime(date.getTime()+(days*24*60*60*1000));expires='; expires='+date.toGMTString();} document.cookie=name+'='+value+expires+'; path='+path;},getCookie:function(name){var i,cookies=' '+d.cookie+';';name=' '+name+'=';if((i=cookies.indexOf(name))>=0){i+=name.length;cookies=cookies.substring(i,cookies.indexOf(';',i));return cookies;}},removeCookie:function(name){return F.util.setCookie(name,'',0);}};}(F));
+				
+(function(wipe_msg, root_url, bust_image_search, is_debug) {
+
+var w=window,d=document,top_loc=top.location,self_loc=self.location,referrer=d.referrer,flickr_regex=/^[A-Za-z]+:\/{2,3}(?:[0-9\-A-Za-z]+\.)*flickr\.(?:(?:com)|(?:net))(?::\d+)?(?:\/[^?#]*)?(?:\?[^#]*)?(?:#.*)?$/i,self_is_offline=(self_loc.protocol&&self_loc.protocol.indexOf('http')<0),self_is_flickr=flickr_regex.test(self_loc),self_url=self_is_flickr?self_loc.href:root_url+'/',photo_page_re_result=self_is_flickr&&/\/photos\/[^\/]+\/(\d+)/i.exec(self_loc.pathname),photo_id=photo_page_re_result&&parseInt(photo_page_re_result[1],10),frame_whitelist_regex=/^[A-Za-z]+:\/{2,3}(?:[0-9\-A-Za-z]+\.)*(?:(?:flickr\.(?:(?:com)|(?:net)))|(?:yahoo\.(?:(?:com)|(?:net)|(?:(?:com?\.)?[A-Za-z]{2})))|(?:creativecommons\.org)|(?:eyewonderlabs\.com)|(?:stumbleupon\.com)|(?:su\.pr)|(?:bing\.com)|(?:google\.(?:(?:com)|(?:(?:com?\.)?[A-Za-z]{2}))))(?::\d+)?(?:\/[^?#]*)?(?:\?[^#]*)?(?:#.*)?$/i,self_whitelist_regex=/^[A-Za-z]+:\/{2,3}(?:[0-9\-A-Za-z]+\.)*(?:(?:flickr\.(?:(?:com)|(?:net)))|(?:yahoo\.(?:(?:com)|(?:net)|(?:(?:com?\.)?[A-Za-z]{2})))|(?:translate\.google\.com)|(?:translate\.googleusercontent\.com)|(?:web\.archive\.org))(?::\d+)?(?:\/[^?#]*)?(?:\?[^#]*)?(?:#.*)?$/i,image_search_regex=/^[A-Za-z]+:\/{2,3}(?:[0-9\-A-Za-z]+\.)*(?:(?:(?:google)|(?:bing))\.(?:(?:com)|(?:(?:com?\.)?[A-Za-z]{2})))(?::\d+)?(?:\/[^?#]*)?(?:\?[^#]*)?(?:#.*)?$/i,referrer_is_flickr=flickr_regex.test(referrer),referrer_is_whitelisted=frame_whitelist_regex.test(referrer),referrer_is_image_search=image_search_regex.test(referrer),faq_url=root_url+'/frame_redir.gne?source='+encodeURIComponent(referrer)+'&dest='+encodeURIComponent(root_url+'/help/blogging/#1392237'),redir_url=root_url+'/frame_redir.gne?source='+encodeURIComponent(referrer)+'&dest='+encodeURIComponent(self_url),should_bust,should_wipe,base;function redirect(){w.onerror=function(){return true;};if(typeof top_loc.replace==='function'){top_loc.replace(redir_url);}else{top_loc.href=redir_url;}} function wipe(){var logo_w,font_size,win_width,html,msg;w.onerror=function(){return true;};logo_w=162;font_size='12px';setInterval(function(){if(d&&d.body){if(d.body.lastChild&&d.body.lastChild.className&&d.body.lastChild.className==='wipe-msg'){}else{msg=wipe_msg.replace('{url}',redir_url).replace('{faq}',faq_url);if(typeof w.innerWidth==='number'){win_width=w.innerWidth;}else if(d.body.clientWidth){win_width=d.body.clientWidth;} if(win_width&&win_width<162){logo_w=win_width;font_size='10px';} html='<div class="wipe-msg" style="font-size:'+font_size+';text-align:left;"><div style="margin-bottom:3px;"><img alt="Flickr" width="'+logo_w+'" src="/web/20120516090317/http://l.yimg.com/g/images/logo_home.png"></div><div style="padding-left:5px;line-height:1.2em;">'+msg+'</div></div>';d.body.style.margin='0';d.body.innerHTML=html;}}},200);} function get_frame_depth(){var win=self,frame_depth=0;while(win!==win.parent){frame_depth+=1;win=win.parent;} return frame_depth;} function debug(){if(is_debug){console.log(arguments);}} if(self_is_flickr&&self_loc===top_loc){}else if(self_is_offline){}else if(!self_is_flickr&&!self_whitelist_regex.test(self_loc)){should_wipe=true;}else if(bust_image_search&&photo_id&&referrer_is_image_search){should_bust=true;}else if(referrer&&!referrer_is_whitelisted){should_wipe=true;}else if(!referrer_is_flickr&&get_frame_depth()>1){should_wipe=true;} if(is_debug){debug({self_is_flickr:self_is_flickr,top_loc:top_loc,self_loc:self_loc,referrer:referrer,self_is_offline:self_is_offline,self_is_flickr:self_is_flickr,self_url:self_url,photo_page_re_result:photo_page_re_result,photo_id:photo_id,referrer_is_flickr:referrer_is_flickr,referrer_is_whitelisted:referrer_is_whitelisted,referrer_is_image_search:referrer_is_image_search,faq_url:faq_url,redir_url:redir_url,should_bust:should_bust,should_wipe:should_wipe,base:base});}else{if(should_bust){setTimeout(function(){w.onbeforeunload=w.onunload=null;redirect();},1000);setTimeout(wipe,2000);redirect();}else if(should_wipe){wipe();}else if(referrer_is_whitelisted&&!referrer_is_flickr){base=document.createElement('base');base.target='_top';document.getElementsByTagName('head')[0].appendChild(base);}}
+
+}('Désolés, Flickr <a href="{faq}" target="_top">ne permet pas l\'incorporation dans les cadres</a>.<br><br><a href="{url}" target="_top">Cliquez ici</a> si vous souhaitez afficher ce contenu.', '/web/20120516090317/http://www.flickr.com', true, false));
+
+	
+		(function(F){var el,w,d,n,ua,ae,is_away_from_tab,de,disabled=false,assigned_events=false;w=window;d=w.document;n=w.navigator;ua=n&&n.userAgent;var supportsActiveElt=false;if('activeElement'in document){supportsActiveElt=true;} function doF(e,me){if(is_away_from_tab&&e.target===w){is_away_from_tab=false;}else{el=e.target||me;}} function doB(e){if(el!==w&&e.target===w){is_away_from_tab=true;}else{el=undefined;}} function get(){var nt,in_doc;if(supportsActiveElt){el=document.activeElement;}else if(el&&(nt=el.nodeType)){if(d.contains){if((ua&&ua.match(/Opera[\s\/]([^\s]*)/))||nt===1){in_doc=d.contains(el);}else{while(el){if(d===el){in_doc=true;} el=el.parentNode;}}}else if(d.compareDocumentPosition){if(d===el||!!(d.compareDocumentPosition(el)&16)){in_doc=true;}}else{var myEl=el;while(myEl){if(d===myEl){in_doc=true;} myEl=myEl.parentNode;}}} return in_doc?el:undefined;} function isInput(){var n=get(),nn;if(!n){return false;} nn=n.nodeName.toLowerCase();return(nn==='input'||nn==='textarea');} function instrumentInputs(){if(!assigned_events){var i,me,inputs=document.getElementsByTagName('input'),tas=document.getElementsByTagName('textarea'),nInputs=inputs.length,nTextAreas=tas.length;if(nInputs||nTextAreas){for(i=0;i<nTextAreas;i++){me=tas[i];tas[i].attachEvent('onfocusin',function(e){if(!disabled){doF(e,me);}});} for(i=0;i<nInputs;i++){me=inputs[i];inputs[i].attachEvent('onfocusin',function(e){if(!disabled){doF(e,me);}});} assigned_events=true;}}} function destroy(){disabled=true;if(de=w.removeEventListener){de('focus',doF,true);de('blur',doB,true);}else if(de=d.removeEvent){de('blur',doB);}} function dom_onready(onready_handler){if(typeof onready_handler==='undefined'){return false;} if(document.readyState==='complete'){onready_handler();}else{if(document.addEventListener){DOMContentLoaded=function(){document.removeEventListener('DOMContentLoaded',DOMContentLoaded,false);onready_handler();};}else if(document.attachEvent){DOMContentLoaded=function(){if(document.readyState==='complete'){document.detachEvent('onreadystatechange',DOMContentLoaded);onready_handler();}};} if(document.addEventListener){document.addEventListener('DOMContentLoaded',onready_handler,false);}else if(document.attachEvent){document.attachEvent('onreadystatechange',onready_handler);}}} if(ae=w.addEventListener){ae('focus',doF,true);ae('blur',doB,true);}else if(ae=d.attachEvent){dom_onready(instrumentInputs);ae('onfocusout',doB);} F.focus_tracker={get:get,isInput:isInput,destroy:destroy};}(F));	
+		(function(){var mod='imageChecker',imgs={},i=0;function stamp(node){return node.id||(node.id=mod+'-'+new Date().getTime()+i++);} F[mod]={load:function(node){imgs[stamp(node)]=true;},error:function(node){imgs[stamp(node)]=false;},check:function(node){return imgs[stamp(node)];}};}());
+	
+	</script>
+
+
+					
+		
+		<script src="/web/20120516090317js_/http://l.yimg.com/g/combo/1/3.5.0?j/yui/3.5.0/yui/yui-.E.A.v23buK&j/yui/3.5.0/.FN/.FN-.E.A.v22Egi"></script>
+
+			
+
+
+
+
+
+
+	<link rel="stylesheet" href="/web/20120516090317cs_/http://l.yimg.com/g/combo/1/3.5.0?c/c_.J_nav.BC.v22YdF&c/c_.J_.D.BC.v22MQX&c/c_.EM_.D.BC.v22Nta&c/c_about-.D.BC.vY9an&" type="text/css">
+
+
+
+
+
+
+
+
+	<link rel="shortcut icon" type="image/ico" href="/web/20120516090317im_/http://l.yimg.com/g/favicon.ico">
+
+	<link rel="search" type="application/opensearchdescription+xml" href="/web/20120516090317/http://www.flickr.com/opensearch.xml" title="Flickr">
+
+
+</head><body class="zeus fr-fr new-footer signed-out">
+<!-- BEGIN WAYBACK TOOLBAR INSERT -->
+<script> if (window.archive_analytics) { window.archive_analytics.values['server_name']="wwwb-app0.us.archive.org";}; </script>
+
+<script type="text/javascript" src="/static/js/disclaim-element.js" ></script>
+<script type="text/javascript" src="/static/js/graph-calc.js" ></script>
+<script type="text/javascript" src="/static/jflot/jquery.min.js" ></script>
+<script type="text/javascript">
+//<![CDATA[
+var firstDate = 820454400000;
+var lastDate = 1388534399999;
+var wbPrefix = "/web/";
+var wbCurrentUrl = "http:\/\/www.flickr.com\/about\/";
+
+var curYear = -1;
+var curMonth = -1;
+var yearCount = 18;
+var firstYear = 1996;
+var imgWidth = 450;
+var yearImgWidth = 25;
+var monthImgWidth = 2;
+var trackerVal = "none";
+var displayDay = "16";
+var displayMonth = "May";
+var displayYear = "2012";
+var prettyMonths = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+function showTrackers(val) {
+	if(val == trackerVal) {
+		return;
+	}
+	if(val == "inline") {
+		document.getElementById("displayYearEl").style.color = "#ec008c";
+		document.getElementById("displayMonthEl").style.color = "#ec008c";
+		document.getElementById("displayDayEl").style.color = "#ec008c";		
+	} else {
+		document.getElementById("displayYearEl").innerHTML = displayYear;
+		document.getElementById("displayYearEl").style.color = "#ff0";
+		document.getElementById("displayMonthEl").innerHTML = displayMonth;
+		document.getElementById("displayMonthEl").style.color = "#ff0";
+		document.getElementById("displayDayEl").innerHTML = displayDay;
+		document.getElementById("displayDayEl").style.color = "#ff0";
+	}
+   document.getElementById("wbMouseTrackYearImg").style.display = val;
+   document.getElementById("wbMouseTrackMonthImg").style.display = val;
+   trackerVal = val;
+}
+function getElementX2(obj) {
+	var thing = jQuery(obj);
+	if((thing == undefined) 
+			|| (typeof thing == "undefined") 
+			|| (typeof thing.offset == "undefined")) {
+		return getElementX(obj);
+	}
+	return Math.round(thing.offset().left);
+}
+function trackMouseMove(event,element) {
+
+   var eventX = getEventX(event);
+   var elementX = getElementX2(element);
+   var xOff = eventX - elementX;
+	if(xOff < 0) {
+		xOff = 0;
+	} else if(xOff > imgWidth) {
+		xOff = imgWidth;
+	}
+   var monthOff = xOff % yearImgWidth;
+
+   var year = Math.floor(xOff / yearImgWidth);
+	var yearStart = year * yearImgWidth;
+   var monthOfYear = Math.floor(monthOff / monthImgWidth);
+   if(monthOfYear > 11) {
+       monthOfYear = 11;
+   }
+   // 1 extra border pixel at the left edge of the year:
+   var month = (year * 12) + monthOfYear;
+   var day = 1;
+	if(monthOff % 2 == 1) {
+		day = 15;
+	}
+	var dateString = 
+		zeroPad(year + firstYear) + 
+		zeroPad(monthOfYear+1,2) +
+		zeroPad(day,2) + "000000";
+
+	var monthString = prettyMonths[monthOfYear];
+	document.getElementById("displayYearEl").innerHTML = year + 1996;
+	document.getElementById("displayMonthEl").innerHTML = monthString;
+	// looks too jarring when it changes..
+	//document.getElementById("displayDayEl").innerHTML = zeroPad(day,2);
+
+	var url = wbPrefix + dateString + '/' +  wbCurrentUrl;
+	document.getElementById('wm-graph-anchor').href = url;
+
+   //document.getElementById("wmtbURL").value="evX("+eventX+") elX("+elementX+") xO("+xOff+") y("+year+") m("+month+") monthOff("+monthOff+") DS("+dateString+") Moy("+monthOfYear+") ms("+monthString+")";
+   if(curYear != year) {
+       var yrOff = year * yearImgWidth;
+       document.getElementById("wbMouseTrackYearImg").style.left = yrOff + "px";
+       curYear = year;
+   }
+   if(curMonth != month) {
+       var mtOff = year + (month * monthImgWidth) + 1;
+       document.getElementById("wbMouseTrackMonthImg").style.left = mtOff + "px";
+       curMonth = month;
+   }
+}
+//]]>
+</script>
+
+<style type="text/css">body{margin-top:0!important;padding-top:0!important;min-width:800px!important;}#wm-ipp a:hover{text-decoration:underline!important;}</style>
+<div id="wm-ipp" lang="en" class="__wb_banner_div" style="display:none; position:relative;padding:0 5px;min-height:70px;min-width:800px">
+
+
+<div id="wm-ipp-inside" class="__wb_banner_div" style="position:fixed;padding:0!important;margin:0!important;width:97%;min-width:780px;border:5px solid #000;border-top:none;background-image:url(/static/images/toolbar/wm_tb_bk_trns.png);text-align:center;-moz-box-shadow:1px 1px 3px #333;-webkit-box-shadow:1px 1px 3px #333;box-shadow:1px 1px 3px #333;font-size:11px!important;font-family:'Lucida Grande','Arial',sans-serif!important;">
+   <table style="border-collapse:collapse;margin:0;padding:0;width:100%;"><tbody><tr>
+   <td style="padding:10px;vertical-align:top;min-width:110px;">
+   <a href="/web/" title="Wayback Machine home page" style="background-color:transparent;border:none;"><img src="/static/images/toolbar/wayback-toolbar-logo.png" alt="Wayback Machine" width="110" height="39" border="0"/></a>
+   </td>
+   <td style="padding:0!important;text-align:center;vertical-align:top;width:100%;">
+
+       <table style="border-collapse:collapse;margin:0 auto;padding:0;width:570px;"><tbody><tr>
+       <td style="padding:3px 0;" colspan="2">
+       <form target="_top" method="get" action="/web/form-submit.jsp" name="wmtb" id="wmtb" style="margin:0!important;padding:0!important;"><input type="text" name="url" id="wmtbURL" value="http://www.flickr.com/about/" style="width:400px;font-size:11px;font-family:'Lucida Grande','Arial',sans-serif;" onfocus="javascript:this.focus();this.select();" /><input type="hidden" name="type" value="replay" /><input type="hidden" name="date" value="20120516090317" /><input type="submit" value="Go" style="font-size:11px;font-family:'Lucida Grande','Arial',sans-serif;margin-left:5px;width: inherit !important" /><span id="wm_tb_options" style="display:block;"></span></form>
+       </td>
+       <td style="vertical-align:bottom;padding:5px 0 0 0!important;" rowspan="2">
+           <table style="border-collapse:collapse;width:110px;color:#99a;font-family:'Helvetica','Lucida Grande','Arial',sans-serif;"><tbody>
+			
+           <!-- NEXT/PREV MONTH NAV AND MONTH INDICATOR -->
+           <tr style="width:110px;height:16px;font-size:10px!important;">
+           	<td style="padding-right:9px;font-size:11px!important;font-weight:bold;text-transform:uppercase;text-align:right;white-space:nowrap;overflow:visible;" nowrap="nowrap">
+               
+		                <a href="/web/20120416004739/http://www.flickr.com/about/" style="text-decoration:none;color:#33f;font-weight:bold;background-color:transparent;border:none;" title="16 Apr 2012"><strong>APR</strong></a>
+		                
+               </td>
+               <td id="displayMonthEl" style="background:#000;color:#ff0;font-size:11px!important;font-weight:bold;text-transform:uppercase;width:34px;height:15px;padding-top:1px;text-align:center;" title="You are here: 9:03:17 May 16, 2012">MAY</td>
+				<td style="padding-left:9px;font-size:11px!important;font-weight:bold;text-transform:uppercase;white-space:nowrap;overflow:visible;" nowrap="nowrap">
+               
+		                <a href="/web/20120616140908/http://www.flickr.com/about" style="text-decoration:none;color:#33f;font-weight:bold;background-color:transparent;border:none;" title="16 Jun 2012"><strong>JUN</strong></a>
+		                
+               </td>
+           </tr>
+
+           <!-- NEXT/PREV CAPTURE NAV AND DAY OF MONTH INDICATOR -->
+           <tr>
+               <td style="padding-right:9px;white-space:nowrap;overflow:visible;text-align:right!important;vertical-align:middle!important;" nowrap="nowrap">
+               
+		                <a href="/web/20120515110843/http://www.flickr.com/about/" title="11:08:43 May 15, 2012" style="background-color:transparent;border:none;"><img src="/static/images/toolbar/wm_tb_prv_on.png" alt="Previous capture" width="14" height="16" border="0" /></a>
+		                
+               </td>
+               <td id="displayDayEl" style="background:#000;color:#ff0;width:34px;height:24px;padding:2px 0 0 0;text-align:center;font-size:24px;font-weight: bold;" title="You are here: 9:03:17 May 16, 2012">16</td>
+				<td style="padding-left:9px;white-space:nowrap;overflow:visible;text-align:left!important;vertical-align:middle!important;" nowrap="nowrap">
+               
+		                <a href="/web/20120516173600/http://www.flickr.com/about/" title="17:36:00 May 16, 2012" style="background-color:transparent;border:none;"><img src="/static/images/toolbar/wm_tb_nxt_on.png" alt="Next capture" width="14" height="16" border="0"/></a>
+		                
+			    </td>
+           </tr>
+
+           <!-- NEXT/PREV YEAR NAV AND YEAR INDICATOR -->
+           <tr style="width:110px;height:13px;font-size:9px!important;">
+				<td style="padding-right:9px;font-size:11px!important;font-weight: bold;text-align:right;white-space:nowrap;overflow:visible;" nowrap="nowrap">
+               
+		                <a href="/web/20110511233148/http://www.flickr.com/about/" style="text-decoration:none;color:#33f;font-weight:bold;background-color:transparent;border:none;" title="11 May 2011"><strong>2011</strong></a>
+		                
+               </td>
+               <td id="displayYearEl" style="background:#000;color:#ff0;font-size:11px!important;font-weight: bold;padding-top:1px;width:34px;height:13px;text-align:center;" title="You are here: 9:03:17 May 16, 2012">2012</td>
+				<td style="padding-left:9px;font-size:11px!important;font-weight: bold;white-space:nowrap;overflow:visible;" nowrap="nowrap">
+               
+		                <a href="/web/20130516102423/http://www.flickr.com/about/" style="text-decoration:none;color:#33f;font-weight:bold;background-color:transparent;border:none;" title="16 May 2013"><strong>2013</strong></a>
+		                
+				</td>
+           </tr>
+           </tbody></table>
+       </td>
+
+       </tr>
+       <tr>
+       <td style="vertical-align:middle;padding:0!important;">
+           <a href="/web/20120516090317*/http://www.flickr.com/about/" style="color:#33f;font-size:11px;font-weight:bold;background-color:transparent;border:none;" title="See a list of every capture for this URL"><strong>3,980 captures</strong></a>
+           <div class="__wb_banner_div" style="margin:0!important;padding:0!important;color:#666;font-size:9px;padding-top:2px!important;white-space:nowrap;" title="Timespan for captures of this URL">13 Jun 06 - 31 Oct 13</div>
+       </td>
+       <td style="padding:0!important;">
+       <a style="position:relative; white-space:nowrap; width:450px;height:27px;" href="" id="wm-graph-anchor">
+       <div class="__wb_banner_div" id="wm-ipp-sparkline" style="position:relative; white-space:nowrap; width:450px;height:27px;background-color:#fff;cursor:pointer;border-right:1px solid #ccc;" title="Explore captures for this URL">
+			<img id="sparklineImgId" style="position:absolute; z-index:9012; top:0px; left:0px;"
+				onmouseover="showTrackers('inline');" 
+				onmouseout="showTrackers('none');"
+				onmousemove="trackMouseMove(event,this)"
+				alt="sparklines"
+				width="450"
+				height="27"
+				border="0"
+				src="/web/jsp/graph.jsp?graphdata=450_27_1996:-1:000000000000_1997:-1:000000000000_1998:-1:000000000000_1999:-1:000000000000_2000:-1:000000000000_2001:-1:000000000000_2002:-1:000000000000_2003:-1:000000000000_2004:-1:000000000000_2005:-1:000000000000_2006:-1:000002441413_2007:-1:011124134601_2008:-1:100020201003_2009:-1:200000011010_2010:-1:012011100001_2011:-1:001211111377_2012:4:878788787787_2013:-1:7defceeb7600"></img>
+			<img id="wbMouseTrackYearImg" 
+				style="display:none; position:absolute; z-index:9010;"
+				width="25" 
+				height="27"
+				border="0"
+				src="/static/images/toolbar/transp-yellow-pixel.png"></img>
+			<img id="wbMouseTrackMonthImg"
+				style="display:none; position:absolute; z-index:9011; " 
+				width="2"
+				height="27" 
+				border="0"
+				src="/static/images/toolbar/transp-red-pixel.png"></img>
+       </div>
+		</a>
+
+       </td>
+       </tr></tbody></table>
+   </td>
+   <td style="text-align:right;padding:5px;width:65px;font-size:11px!important;">
+       <a href="javascript:;" onclick="document.getElementById('wm-ipp').style.display='none';" style="display:block;padding-right:18px;background:url(/static/images/toolbar/wm_tb_close.png) no-repeat 100% 0;color:#33f;font-family:'Lucida Grande','Arial',sans-serif;margin-bottom:23px;background-color:transparent;border:none;" title="Close the toolbar">Close</a>
+       <a href="http://faq.web.archive.org/" style="display:block;padding-right:18px;background:url(/static/images/toolbar/wm_tb_help.png) no-repeat 100% 0;color:#33f;font-family:'Lucida Grande','Arial',sans-serif;background-color:transparent;border:none;" title="Get some help using the Wayback Machine">Help</a>
+   </td>
+   </tr></tbody></table>
+
+</div>
+</div>
+<script type="text/javascript">
+ var wmDisclaimBanner = document.getElementById("wm-ipp");
+ if(wmDisclaimBanner != null) {
+   disclaimElement(wmDisclaimBanner);
+ }
+</script>
+<!-- END WAYBACK TOOLBAR INSERT -->
+
+<script>(function(){var b=document.body,ua=typeof YUI==='function'&&YUI()&&YUI().UA,os=ua&&(ua.os?ua.os.replace(/\s/g,''):'')||(ua.ios?'ios':'')||(ua.android?'android':'');function make_class(browser){return(os&&ua[browser])?'ua-'+os+'-'+browser+' '+'ua-'+os+'-'+browser+'-'+Math.floor(ua[browser]):'';} b.className=[b.className,'js',make_class('webkit')||make_class('ie')||make_class('gecko')].join(' ');}());</script>
+		
+<noscript>
+	<div id="beacon"><img src="/web/20120516090317im_/http://geo.yahoo.com/f?s=792600056&t=0ceec84ba5e458021fb70b43bdae11ce&r=http%3A%2F%2Fwww.flickr.com%2F&fl_ev=0&lang=fr&intl=us" width="0" height="0" alt="" /></div>
+</noscript>
+	
+		
+	
+	<a name="top"></a>
+
+
+<script>
+	(function(F){var SCROLLBAR_WIDTH=15,MIN_PAGE_WIDTH=1024,MIN_PAGE_HEIGHT=768,SECONDARY_PAGE_CONTENT_WIDTH=335,SIDE_GUTTER_WIDTH=49,HEIGHT_TO_PHOTO_TOP=124,HEIGHT_OF_TITLE=45,HEADER_WIDTH_ADJUSTMENT_ZEUS=15,HEADER_WIDTH_ADJUSTMENT_NON_ZEUS=5,DETENTS=[640,800,1024,1600],DETENT_TOLERENCE=60,LARGEST_PHOTO_WIDTH=1600;var bodyInitialized=false,cachedPhotoWidth;function verifyDimension(n){return(typeof n==='number'&&n>0);} F.liquid={getDimensions:function(){var doc=window.document,win=doc.defaultView||doc.parentWindow,mode=doc.compatMode,h=win.innerHeight,w=win.innerWidth,root=doc.documentElement;if(mode){if(mode!=='CSS1Compat'){root=doc.body;} h=root.clientHeight;w=root.clientWidth;} w=w-SCROLLBAR_WIDTH;if(verifyDimension(w)&&verifyDimension(h)){return{height:h,width:w};} return false;},getBestPhotoWidth:function(invalidateCache){var dimensions,bestWidth=MIN_PAGE_WIDTH-SECONDARY_PAGE_CONTENT_WIDTH-SIDE_GUTTER_WIDTH,workableWidth,workableHeight,n,len;if(invalidateCache){cachedPhotoWidth=null;} if(cachedPhotoWidth){return cachedPhotoWidth;} dimensions=F.liquid.getDimensions()||{width:MIN_PAGE_WIDTH,height:MIN_PAGE_HEIGHT};if(dimensions.width>MIN_PAGE_WIDTH){workableWidth=dimensions.width-SECONDARY_PAGE_CONTENT_WIDTH-SIDE_GUTTER_WIDTH;workableHeight=dimensions.height-HEIGHT_TO_PHOTO_TOP-HEIGHT_OF_TITLE;if(workableWidth*3/4>workableHeight){bestWidth=Math.max(Math.floor(workableHeight*4/3),MIN_PAGE_WIDTH-SECONDARY_PAGE_CONTENT_WIDTH-SIDE_GUTTER_WIDTH);} else{bestWidth=workableWidth;} if(bestWidth>LARGEST_PHOTO_WIDTH){bestWidth=LARGEST_PHOTO_WIDTH;} else{for(n=0,len=DETENTS.length;n<len;n++){if(bestWidth>DETENTS[n]&&bestWidth<DETENTS[n]+DETENT_TOLERENCE){bestWidth=DETENTS[n];break;}}}} cachedPhotoWidth=bestWidth;return bestWidth;},getBestPageWidth:function(invalidateCache){return F.liquid.getBestPhotoWidth(invalidateCache)+SECONDARY_PAGE_CONTENT_WIDTH;},scaleDownPhotoToViewable:function(photoDimensions,scalingFactor){var dimensions=F.liquid.getDimensions()||{width:MIN_PAGE_WIDTH,height:MIN_PAGE_HEIGHT},workableHeight=dimensions.height-HEIGHT_TO_PHOTO_TOP-HEIGHT_OF_TITLE,biggestDimension=Math.max(photoDimensions.w,photoDimensions.h),n,len,scaledBiggestDimension;if(photoDimensions.h*scalingFactor>workableHeight){scalingFactor=workableHeight/photoDimensions.h;if(biggestDimension*scalingFactor<MIN_PAGE_WIDTH-SECONDARY_PAGE_CONTENT_WIDTH-SIDE_GUTTER_WIDTH){scalingFactor=(MIN_PAGE_WIDTH-SECONDARY_PAGE_CONTENT_WIDTH-SIDE_GUTTER_WIDTH)/biggestDimension;}} scaledBiggestDimension=Math.floor(biggestDimension*scalingFactor);for(n=0,len=DETENTS.length;n<len;n++){if(scaledBiggestDimension>DETENTS[n]&&scaledBiggestDimension<DETENTS[n]+DETENT_TOLERENCE){scalingFactor=DETENTS[n]/biggestDimension;break;}} return scalingFactor;},resizePage:function(invalidateCache){var totalPageWidth=F.liquid.getBestPageWidth(invalidateCache);F.util.setCookie('liqpw',totalPageWidth,365);if(!bodyInitialized){F.util.whenElementExists('body',function(body){F.util.addClass(body,'liquid');bodyInitialized=true;});} F.util.whenElementExists('main',function(main){if(!F.util.hasClass(document.body,'breakout')&&F.util.hasClass(main,'allow-liquid-width')){main.style.width=totalPageWidth+'px';}});F.util.whenElementExists('head-nav-bar',function(headNavBar){var headTop=F.util.getElementById('head-top'),headerWidthAdjustment=(headTop.tagName==='TABLE')?HEADER_WIDTH_ADJUSTMENT_NON_ZEUS:HEADER_WIDTH_ADJUSTMENT_ZEUS;headTop.style.width=(totalPageWidth+headerWidthAdjustment)+'px';headNavBar.style.width=(totalPageWidth+headerWidthAdjustment)+'px';});F.util.whenElementExists('foot',function(foot){foot.style.width=totalPageWidth+'px';});F.util.whenElementExists('foot-wrap',function(footWrap){footWrap.style.width=totalPageWidth+'px';});F.util.whenElementExists('gn-wrap',function(wrap){wrap.style.width=totalPageWidth+'px';});return totalPageWidth;}};}(F));	F.liquid.resizePage();
+	
+</script>
+
+
+
+	
+	
+
+	
+	
+
+
+
+
+
+
+	<div id="head" role="banner">
+
+		<div id="head-top">
+			<div id="head-logo">
+															<a tabindex="-1" data-track="home-logo" href="/web/20120516090317/http://www.flickr.com/"><img src="/web/20120516090317im_/http://l.yimg.com/g/images/fr-fr/flickr-yahoo-logo.png.v4" width="180" height="30" alt="Logo Flickr. Si vous cliquez dessus, vous reviendrez à la page d'accueil"></a>
+														</div>
+			<div id="head-status">
+			    
+								Vous n'êtes pas connecté
+					&nbsp;&nbsp;&nbsp;
+					<a data-track="signin" id="head-signin-link" href="/web/20120516090317/http://www.flickr.com/signin/" class="ywa-track signin-popup" data-ywa-name="Sign in (top)">Connexion</a>
+
+					&nbsp;&nbsp;
+					<a data-track="help" href="/web/20120516090317/http://www.flickr.com/help/">Aide</a>
+						</div>
+		</div>
+
+		<div id="head-nav-bar">
+							
+
+
+
+<div id="search_header_container">
+
+         
+	<form action="/web/20120516090317/http://www.flickr.com/search/" method="get" id="headersearchform" class="nav-selecta" role="search">
+		<input name="q" id="nav-selecta-field" aria-label="Rechercher" type="text" tabindex="5" class="Box" autocomplete="off" value="">
+		<input value="Rechercher" type="submit" tabindex="5" id="nav-selecta-search-button">
+	</form>
+
+	</div>				
+
+<div id="flickr_nav" class="flickr_nav no_js clearfix">
+	<ul role="navigation">
+
+		<li class="no_menu_li"><span><a href="/web/20120516090317/http://www.flickr.com/" data-track="toto">Accueil</a></span></li>
+				
+		
+		<li class="no_menu_li">
+			<span><a href="/web/20120516090317/http://www.flickr.com/tour/" title="Visiter Flickr" class="ywa-track" data-ywa-name="Tour">La visite</a></span>
+		</li>
+		
+		<li class="no_menu_li">
+			<span><a data-track="signup" id="head-sign-up" href="/web/20120516090317/http://www.flickr.com/signup/" title="Ouvrir un compte gratuit" class="ywa-track" data-ywa-name="Sign up (top)">Inscription</a></span>
+		</li>
+
+
+
+		<li class="menu_li ywa-track" data-ywa-name="Explore" id="flickr_nav_button_explore">
+		
+			<span>
+				<a href="/web/20120516090317/http://www.flickr.com/explore/" data-track="explore-top-link" title="Explorer Flickr">Explorer</a> <a href="/web/20120516090317/http://www.flickr.com/about/#flickr_nav_button_explore" data-track="explore_menu" title="Plus d'options" onclick="if (F.actionQueue) {F.actionQueue.queue_click('flickr-nav', event);} return false" class="nav_more"><img src="/web/20120516090317im_/http://l.yimg.com/g/images/spaceout.gif" class="nav_button_caret" width="18" height="15" alt="Plus d'options"></a>
+			</span>
+
+			<ul class="flickr_nav_menu" id="flickr_nav_menu_explore">
+					
+				<li>
+					<a data-track="explore" href="/web/20120516090317/http://www.flickr.com/explore/">Accueil Explorer</a>
+				</li>
+
+				<li>
+					<a href="/web/20120516090317/http://www.flickr.com/explore/interesting/7days/">Le meilleur des 7 derniers jours</a>
+				</li>
+			
+				<li>
+					<a href="/web/20120516090317/http://www.flickr.com/photos/tags/">Tags populaires</a>
+				</li>
+			
+				<li>
+					<a data-track="interesting-calendar" href="/web/20120516090317/http://www.flickr.com/explore/interesting/2012/05/">Calendrier</a>
+				</li>
+			
+				<li>
+					<a href="/web/20120516090317/http://www.flickr.com/photos/">Chargements les plus récents</a>
+				</li>
+			
+				<li>
+					<a href="/web/20120516090317/http://www.flickr.com/explore/video/">La vidéo sur Flickr</a>
+				</li>
+			
+									<li>
+						<a href="/web/20120516090317/http://www.flickr.com/galleries/">Expos</a>
+					</li>
+							
+							
+								
+				<li>
+					<a href="/web/20120516090317/http://www.flickr.com/gettyimages" title="Getty Images">Getty Images</a>
+				</li>
+			
+							
+									<li>
+						<hr />
+						<a href="/web/20120516090317/http://www.flickr.com/map/" title="Photos et vidéos sur la carte">Carte du monde</a>
+					</li>
+							
+									<li>
+						<a href="/web/20120516090317/http://www.flickr.com/places/">Lieux</a>
+					</li>
+							
+				<li>
+					<hr />
+					<a href="/web/20120516090317/http://www.flickr.com/commons/">The Commons</a>
+				</li>
+			
+				<li>
+					<a href="/web/20120516090317/http://www.flickr.com/creativecommons/">Creative Commons</a>
+				</li>
+			
+				<li>
+					<hr />
+					<a href="/web/20120516090317/http://blog.flickr.com/">FlickrBlog</a>
+				</li>
+			
+				<li>
+					<a href="/web/20120516090317/http://code.flickr.com/">code.flickr</a>
+				</li>
+			
+				<li>
+					<a href="/web/20120516090317/http://www.flickr.com/services/">App Garden</a>
+				</li>
+
+									<li>
+						<a href="/web/20120516090317/http://www.flickr.com/cameras/">La recherche par appareil photo</a>
+					</li>
+								
+				
+				<li>
+					<a href="/web/20120516090317/http://www.flickr.com/mobile">Flickr pour votre mobile</a>
+				</li>	
+					
+
+			</ul>
+		</li>
+
+		
+		<li class="no_menu_li last_item">
+			<span><a id="head-upload-link" href="/web/20120516090317/http://www.flickr.com/photos/upload/">Importer</a></span>
+		</li>
+
+	</ul>
+</div>
+
+			
+
+		</div>
+	</div>
+
+
+	
+			
+						
+	<div id="main" class="clearfix" role="main">
+		
+	
+
+	
+<div id="about-sidebar">
+	<ul>
+		<li><a href="/web/20120516090317/http://www.flickr.com/tour/">Visite guidée</a></li>
+		<li><a href="/web/20120516090317/http://blog.flickr.net/">Blog Flickr</a></li>
+		<li><a href="/web/20120516090317/http://www.flickr.com/about/goodies/">Modules Flickr</a></li>
+		<li><a href="/web/20120516090317/http://www.flickr.com/guidelines/">Règles de la communauté</a></li>
+		<li><a href="/web/20120516090317/http://www.flickr.com/jobs/">Carrières</a></li>
+	</ul>
+
+	<p id="join-or-login">
+		<a href="/web/20120516090317/http://www.flickr.com/signup/"><img src="/web/20120516090317im_/http://l.yimg.com/g/images/tour/fr-fr/create-account-button.png" width="193" height="39" alt="Creez un compte"></a>
+		<a href="/web/20120516090317/http://www.flickr.com/signin/">ou connexion</a>
+	</p>
+
+	<h3 class="sub-nav-title">Besoin d'aide ?</h3>
+	<p class="sub-nav">
+		<a href="/web/20120516090317/http://www.flickr.com/help/faq/">Consultez notre FAQ</a><br>
+		<a href="/web/20120516090317/http://www.flickr.com/help/">Obtenir de l’aide par email</a>
+	</p>
+
+	<h3 class="sub-nav-title">Contacts RP et Marque</h3>
+	<p class="sub-nav">
+		<a href="mailto:flickr-pr@yahoo-inc.com">Flickr/Yahoo! RP</a><br>
+		<a href="/web/20120516090317/http://pressroom.yahoo.net/pr/ycorp/permissions.aspx">Autorisations de marque</a>
+	</p>
+</div>
+<div id="about-main">
+	<h1 class="pink">À propos de Flickr</h1>
+				
+	<h2>Flickr, certainement le meilleur service de gestion et de partage de photos en ligne, s'est fixé <i>deux objectifs principaux</i> :</h2>
+		
+	<blockquote>
+		
+		<h3><b class="num">1.</b> Nous souhaitons <b>permettre aux gens de partager leurs photos avec les personnes de leur choix</b>.</h3>
+
+		<p>Vous souhaitez regrouper sur un blog les moments capturés avec votre téléphone portable ou partager vos plus belles photos et vos plus belles vidéos avec le monde entier et devenir une célébrité du Web ? Ou souhaitez-vous simplement partager en toute sécurité et en toute confidentialité les photos de vos enfants avec votre famille dispersée aux quatre coins du pays ? Flickr répond à toutes vos attentes et plus encore !</p>
+		<p>Pour ce faire , vous pouvez <b>ajouter vos photos et vos vidéos à partir d’un maximum de sources</b> : Web, périphériques mobiles, ordinateurs personnels et logiciels de gestion de photos. Faites ensuite découvrir vos photos et vos vidéos de toutes les manières possibles : site Web Flickr, fils RSS, courriers électroniques, blogs externes, etc. À quoi d’autre ces outils intelligents nous serviraient-ils ?</p>
+		
+		<h3><b class="num">2.</b> Notre but est de <b>proposer de nouvelles méthodes d’organisation pour vos photos et vos vidéos</b>.</h3>
+				
+		<p>Une fois passé à l’ère numérique, vous êtes rapidement submergé par la quantité impressionnante de photos prises et de vidéos enregistrées. De nos jours, on utilise principalement des albums pour organiser photos. C’est une méthode efficace, tant qu’on ne dépasse pas 20, 30 ou 50 albums ! Les albums remplissaient parfaitement leur rôle du temps de l’argentique, mais il est dorénavant temps pour eux de prendre une retraite bien méritée.</p>
+		<p>Grâce à Flickr, le processus d’organisation des photos et des vidéos est basé sur la collaboration. En effet, vous pouvez autoriser vos amis, votre famille et d’autres contacts à organiser vos éléments. Ils peuvent ainsi non seulement ajouter des commentaires, mais également insérer des remarques et des tags. Les gens aiment communiquer leur surprise, leur émerveillement, leur joie, leur tristesse et faire de l’esprit lorsqu’ils partagent photos et vidéos. Pourquoi ne pas leur offrir cette possibilité lorsqu’ils consultent des images sur Internet ? De plus, toutes ces informations font partie des métadonnées. Vous pourrez ainsi aisément les retrouver à tout moment grâce aux fonctions de recherche.</p>
+	</blockquote>
+		
+	<p>Flickr est en constante évolution afin de devenir plus convivial et plus performant. Consultez régulièrement le <a href="/web/20120516090317/http://blog.flickr.com/">Blog Flickr</a> pour être tenu informé des derniers développements. Vous êtes arrivé au bout de ce texte, ce qui prouve bien l'intérêt que vous manifestez pour Flickr. Alors, qu'attendez-vous ?
+		<a href="/web/20120516090317/http://www.flickr.com/signup/"><b>Inscrivez-vous dès maintenant !</b></a>
+		
+	</p>
+
+	<h3 id="team" class="pink">L'équipe</h3>
+	
+	<table>
+					<tr valign="top">
+									<td width="16.666%" align="center">
+					    					        					        					        <img src="/web/20120516090317im_/http://farm1.staticflickr.com/1/buddyicons/60065287@N00.jpg?1301503423#60065287@N00" alt="Peter Norby" width="48" height="48" class="personmenu-trigger">
+					        					        <br><small>Peter Norby</small><br><br>
+					    					</td>
+									<td width="16.666%" align="center">
+					    					        					        					        <img src="/web/20120516090317im_/http://farm1.staticflickr.com/4/buddyicons/12289718@N00.jpg?1273007700#12289718@N00" alt="Scott Schiller" width="48" height="48" class="personmenu-trigger">
+					        					        <br><small>Scott Schiller</small><br><br>
+					    					</td>
+									<td width="16.666%" align="center">
+					    					        					        					        <img src="/web/20120516090317im_/http://farm4.staticflickr.com/3023/buddyicons/41047258@N00.jpg?1334168198#41047258@N00" alt="Zack Sheppard" width="48" height="48" class="personmenu-trigger">
+					        					        <br><small>Zack Sheppard</small><br><br>
+					    					</td>
+									<td width="16.666%" align="center">
+					    					        					        					        <img src="/web/20120516090317im_/http://farm1.staticflickr.com/45/buddyicons/51035718466@N01.jpg?1336767127#51035718466@N01" alt="Daniel Bogan" width="48" height="48" class="personmenu-trigger">
+					        					        <br><small>Daniel Bogan</small><br><br>
+					    					</td>
+									<td width="16.666%" align="center">
+					    					        					        					        <img src="/web/20120516090317im_/http://farm3.staticflickr.com/2157/buddyicons/12951874@N00.jpg?1273015683#12951874@N00" alt="David Fusco" width="48" height="48" class="personmenu-trigger">
+					        					        <br><small>David Fusco</small><br><br>
+					    					</td>
+									<td width="16.666%" align="center">
+					    					        					        					        <img src="/web/20120516090317im_/http://farm3.staticflickr.com/2208/buddyicons/9612964@N04.jpg?1289008779#9612964@N04" alt="Emily Yiu" width="48" height="48" class="personmenu-trigger">
+					        					        <br><small>Emily Yiu</small><br><br>
+					    					</td>
+							</tr>
+					<tr valign="top">
+									<td width="16.666%" align="center">
+					    					        					        					        <img src="/web/20120516090317im_/http://farm2.staticflickr.com/1243/buddyicons/63633974@N00.jpg?1273024083#63633974@N00" alt="Phil Yu" width="48" height="48" class="personmenu-trigger">
+					        					        <br><small>Phil Yu</small><br><br>
+					    					</td>
+									<td width="16.666%" align="center">
+					    					        					        					        <img src="/web/20120516090317im_/http://farm1.staticflickr.com/8/buddyicons/43878178@N00.jpg?1333533926#43878178@N00" alt="Kay Kremerskothen" width="48" height="48" class="personmenu-trigger">
+					        					        <br><small>Kay Kremerskothen</small><br><br>
+					    					</td>
+									<td width="16.666%" align="center">
+					    					        					        					        <img src="/web/20120516090317im_/http://farm1.staticflickr.com/12/buddyicons/44124406322@N01.jpg?1315841915#44124406322@N01" alt="Jenny Mette" width="48" height="48" class="personmenu-trigger">
+					        					        <br><small>Jenny Mette</small><br><br>
+					    					</td>
+									<td width="16.666%" align="center">
+					    					        					        					        <img src="/web/20120516090317im_/http://farm1.staticflickr.com/19/buddyicons/81183458@N00.jpg?1306526907#81183458@N00" alt="Ross Harmes" width="48" height="48" class="personmenu-trigger">
+					        					        <br><small>Ross Harmes</small><br><br>
+					    					</td>
+									<td width="16.666%" align="center">
+					    					        					        					        <img src="/web/20120516090317im_/http://farm1.staticflickr.com/1/buddyicons/28306058@N00.jpg?1330997124#28306058@N00" alt="Timothy Denike" width="48" height="48" class="personmenu-trigger">
+					        					        <br><small>Timothy Denike</small><br><br>
+					    					</td>
+									<td width="16.666%" align="center">
+					    					        					        					        <img src="/web/20120516090317im_/http://farm1.staticflickr.com/223/buddyicons/83052216@N00.jpg?1296176780#83052216@N00" alt="Phil King" width="48" height="48" class="personmenu-trigger">
+					        					        <br><small>Phil King</small><br><br>
+					    					</td>
+							</tr>
+					<tr valign="top">
+									<td width="16.666%" align="center">
+					    					        					        					        <img src="/web/20120516090317im_/http://farm1.staticflickr.com/212/buddyicons/19933500@N00.jpg?1234736284#19933500@N00" alt="Daniel Eiba" width="48" height="48" class="personmenu-trigger">
+					        					        <br><small>Daniel Eiba</small><br><br>
+					    					</td>
+									<td width="16.666%" align="center">
+					    					        					        					        <img src="/web/20120516090317im_/http://farm4.staticflickr.com/3264/buddyicons/25003185@N07.jpg?1304702778#25003185@N07" alt="Denise Leung" width="48" height="48" class="personmenu-trigger">
+					        					        <br><small>Denise Leung</small><br><br>
+					    					</td>
+									<td width="16.666%" align="center">
+					    					        					        					        <img src="/web/20120516090317im_/http://farm1.staticflickr.com/6/buddyicons/97898435@N00.jpg?1273016685#97898435@N00" alt="Trevor Hartsell" width="48" height="48" class="personmenu-trigger">
+					        					        <br><small>Trevor Hartsell</small><br><br>
+					    					</td>
+									<td width="16.666%" align="center">
+					    					        					        					        <img src="/web/20120516090317im_/http://farm5.staticflickr.com/4002/buddyicons/14646162@N03.jpg?1323466983#14646162@N03" alt="Eric Gelinas" width="48" height="48" class="personmenu-trigger">
+					        					        <br><small>Eric Gelinas</small><br><br>
+					    					</td>
+									<td width="16.666%" align="center">
+					    					        					        					        <img src="/web/20120516090317im_/http://farm4.staticflickr.com/3529/buddyicons/42151838@N03.jpg?1327300067#42151838@N03" alt="Markus Spiering" width="48" height="48" class="personmenu-trigger">
+					        					        <br><small>Markus Spiering</small><br><br>
+					    					</td>
+									<td width="16.666%" align="center">
+					    					        					        					        <img src="/web/20120516090317im_/http://farm3.staticflickr.com/2307/buddyicons/79577558@N00.jpg?1323323754#79577558@N00" alt="Henry Lyne" width="48" height="48" class="personmenu-trigger">
+					        					        <br><small>Henry Lyne</small><br><br>
+					    					</td>
+							</tr>
+					<tr valign="top">
+									<td width="16.666%" align="center">
+					    					        					        					        <img src="/web/20120516090317im_/http://farm1.staticflickr.com/35/buddyicons/67101477@N00.jpg?1333258989#67101477@N00" alt="Stephen Woods" width="48" height="48" class="personmenu-trigger">
+					        					        <br><small>Stephen Woods</small><br><br>
+					    					</td>
+									<td width="16.666%" align="center">
+					    					        					        					        <img src="/web/20120516090317im_/http://farm8.staticflickr.com/7020/buddyicons/21207597@N07.jpg?1323275590#21207597@N07" alt="Jamal Fanaian" width="48" height="48" class="personmenu-trigger">
+					        					        <br><small>Jamal Fanaian</small><br><br>
+					    					</td>
+									<td width="16.666%" align="center">
+					    					        					        					        <img src="/web/20120516090317im_/http://farm1.staticflickr.com/21/buddyicons/60452248@N00.jpg?1127184109#60452248@N00" alt="Phillip Moore" width="48" height="48" class="personmenu-trigger">
+					        					        <br><small>Phillip Moore</small><br><br>
+					    					</td>
+									<td width="16.666%" align="center">
+					    					        					        					        <img src="/web/20120516090317im_/http://farm1.staticflickr.com/55/buddyicons/87677022@N00.jpg?1326965949#87677022@N00" alt="Mike Deerkoski" width="48" height="48" class="personmenu-trigger">
+					        					        <br><small>Mike Deerkoski</small><br><br>
+					    					</td>
+									<td width="16.666%" align="center">
+					    					        					        					        <img src="/web/20120516090317im_/http://farm1.staticflickr.com/22/buddyicons/34994084@N00.jpg?1302455391#34994084@N00" alt="Chris Berry" width="48" height="48" class="personmenu-trigger">
+					        					        <br><small>Chris Berry</small><br><br>
+					    					</td>
+									<td width="16.666%" align="center">
+					    					        					        					        <img src="/web/20120516090317im_/http://farm4.staticflickr.com/3530/buddyicons/81237759@N00.jpg?1294217015#81237759@N00" alt="Sergey Morozov" width="48" height="48" class="personmenu-trigger">
+					        					        <br><small>Sergey Morozov</small><br><br>
+					    					</td>
+							</tr>
+					<tr valign="top">
+									<td width="16.666%" align="center">
+					    					        					        					        <img src="/web/20120516090317im_/http://farm1.staticflickr.com/8/buddyicons/43082001@N00.jpg?1328033398#43082001@N00" alt="Cindy Li" width="48" height="48" class="personmenu-trigger">
+					        					        <br><small>Cindy Li</small><br><br>
+					    					</td>
+									<td width="16.666%" align="center">
+					    					        					        					        <img src="/web/20120516090317im_/http://farm1.staticflickr.com/16/buddyicons/49621803@N00.jpg?1318958508#49621803@N00" alt="Tim Miller" width="48" height="48" class="personmenu-trigger">
+					        					        <br><small>Tim Miller</small><br><br>
+					    					</td>
+									<td width="16.666%" align="center">
+					    					        					        					        <img src="/web/20120516090317im_/http://farm6.staticflickr.com/5266/buddyicons/61607483@N06.jpg?1306974396#61607483@N06" alt="Brad Peralta" width="48" height="48" class="personmenu-trigger">
+					        					        <br><small>Brad Peralta</small><br><br>
+					    					</td>
+									<td width="16.666%" align="center">
+					    					        					        					        <img src="/web/20120516090317im_/http://farm1.staticflickr.com/27/buddyicons/24293007@N00.jpg?1152936201#24293007@N00" alt="Chris Hamilton" width="48" height="48" class="personmenu-trigger">
+					        					        <br><small>Chris Hamilton</small><br><br>
+					    					</td>
+									<td width="16.666%" align="center">
+					    					        					        					        <img src="/web/20120516090317im_/http://farm6.staticflickr.com/5315/buddyicons/64665527@N02.jpg?1309451874#64665527@N02" alt="Matt Jennings" width="48" height="48" class="personmenu-trigger">
+					        					        <br><small>Matt Jennings</small><br><br>
+					    					</td>
+									<td width="16.666%" align="center">
+					    					        					        					        <img src="/web/20120516090317im_/http://farm7.staticflickr.com/6193/buddyicons/46623443@N00.jpg?1315590992#46623443@N00" alt="Peter Welch" width="48" height="48" class="personmenu-trigger">
+					        					        <br><small>Peter Welch</small><br><br>
+					    					</td>
+							</tr>
+					<tr valign="top">
+									<td width="16.666%" align="center">
+					    					        					        					        <img src="/web/20120516090317im_/http://farm1.staticflickr.com/8/buddyicons/36521981547@N01.jpg?1240367929#36521981547@N01" alt="Phil Dokas" width="48" height="48" class="personmenu-trigger">
+					        					        <br><small>Phil Dokas</small><br><br>
+					    					</td>
+									<td width="16.666%" align="center">
+					    					        					        					        <img src="/web/20120516090317im_/http://farm2.staticflickr.com/1171/buddyicons/31849727@N00.jpg?1190587102#31849727@N00" alt="Hugo Haas" width="48" height="48" class="personmenu-trigger">
+					        					        <br><small>Hugo Haas</small><br><br>
+					    					</td>
+									<td width="16.666%" align="center">
+					    					        					        					        <img src="/web/20120516090317im_/http://farm7.staticflickr.com/6055/buddyicons/67739563@N04.jpg?1318667190#67739563@N04" alt="Marc Perry" width="48" height="48" class="personmenu-trigger">
+					        					        <br><small>Marc Perry</small><br><br>
+					    					</td>
+									<td width="16.666%" align="center">
+					    					        					        					        <img src="/web/20120516090317im_/http://farm7.staticflickr.com/6114/buddyicons/36705214@N06.jpg?1320218375#36705214@N06" alt="William Stubbs" width="48" height="48" class="personmenu-trigger">
+					        					        <br><small>William Stubbs</small><br><br>
+					    					</td>
+									<td width="16.666%" align="center">
+					    					        					        					        <img src="/web/20120516090317im_/http://farm7.staticflickr.com/6037/buddyicons/48919193@N00.jpg?1320865770#48919193@N00" alt="Georges Haddad" width="48" height="48" class="personmenu-trigger">
+					        					        <br><small>Georges Haddad</small><br><br>
+					    					</td>
+									<td width="16.666%" align="center">
+					    					        					        					        <img src="/web/20120516090317im_/http://farm6.staticflickr.com/5331/buddyicons/27242387@N00.jpg?1334605779#27242387@N00" alt="Joshua Cohen" width="48" height="48" class="personmenu-trigger">
+					        					        <br><small>Joshua Cohen</small><br><br>
+					    					</td>
+							</tr>
+					<tr valign="top">
+									<td width="16.666%" align="center">
+					    					        					        					        <img src="/web/20120516090317im_/http://farm3.staticflickr.com/2532/buddyicons/14195889@N08.jpg?1255998124#14195889@N08" alt="Erin Wermuth" width="48" height="48" class="personmenu-trigger">
+					        					        <br><small>Erin Wermuth</small><br><br>
+					    					</td>
+									<td width="16.666%" align="center">
+					    					        					        					        <img src="/web/20120516090317im_/http://farm4.staticflickr.com/3154/buddyicons/34774108@N00.jpg?1332143068#34774108@N00" alt="John Ubante" width="48" height="48" class="personmenu-trigger">
+					        					        <br><small>John Ubante</small><br><br>
+					    					</td>
+									<td width="16.666%" align="center">
+					    					        					        					        <img src="/web/20120516090317im_/http://farm1.staticflickr.com/28/buddyicons/91332142@N00.jpg?1131722974#91332142@N00" alt="Brett Wayn" width="48" height="48" class="personmenu-trigger">
+					        					        <br><small>Brett Wayn</small><br><br>
+					    					</td>
+									<td width="16.666%" align="center">
+					    					        					        					        <img src="/web/20120516090317im_/http://farm8.staticflickr.com/7210/buddyicons/75089363@N02.jpg?1334854938#75089363@N02" alt="Anna Thomas" width="48" height="48" class="personmenu-trigger">
+					        					        <br><small>Anna Thomas</small><br><br>
+					    					</td>
+									<td width="16.666%" align="center">
+					    					        					        					        <img src="/web/20120516090317im_/http://farm4.staticflickr.com/3101/buddyicons/46696356@N00.jpg?1337109671#46696356@N00" alt="Sean Perkins" width="48" height="48" class="personmenu-trigger">
+					        					        <br><small>Sean Perkins</small><br><br>
+					    					</td>
+							</tr>
+					</table>
+</div>
+
+
+    	</div>
+
+
+
+
+ 	<div id="foot" class="new-foot" role="contentinfo">
+		<div id="foot-wrap" class="clearfix">
+	 			<div id="foot-nav" class="clearfix">
+	<div class="foot-nav-col-new">
+		<dl>
+			
+			<dt>À propos de Flickr</dt>
+			<dd><a href="/web/20120516090317/http://www.flickr.com/about/">Qui nous sommes</a></dd>
+			<dd><a href="/web/20120516090317/http://www.flickr.com/tour/">Visite guidée</a></dd>
+			<dd><a href="/web/20120516090317/http://blog.flickr.net/fr">Blog Flickr</a></dd>
+			<dd><a href="/web/20120516090317/http://www.flickr.com/jobs/">Carrières</a></dd>
+		</dl>
+	</div>
+	<div class="foot-nav-col-new">
+		<dl>
+			<dt>Communauté</dt> 
+			<dd><a href="/web/20120516090317/http://www.flickr.com/help/guidelines/">Règles de la communauté</a></dd>
+			<dd><a id="ft-report-abuse" href="/web/20120516090317/http://www.flickr.com/abuse/">Signaler un abus</a></dd>
+		</dl>
+	</div>
+	<div class="foot-nav-col-new">
+		<dl>
+			<dt>Aide</dt>
+			<dd><a href="/web/20120516090317/http://www.flickr.com/help/">Besoin d'aide ? Commencez ici !</a></dd>
+			<dd><a href="/web/20120516090317/http://www.flickr.com/help/forum/">Forum d'aide</a></dd>
+			<dd><a href="/web/20120516090317/http://www.flickr.com/help/faq/">FAQ</a></dd>
+			<dd><a href="/web/20120516090317/http://info.yahoo.com/relevantads" target="_blank">À propos de nos annonces</a></dd>		</dl>
+	</div>
+	<div class="foot-nav-col-new">
+		<dl>
+			<dt>Les applications et l'API</dt>
+			<dd><a href="/web/20120516090317/http://www.flickr.com/mobile">Flickr pour votre mobile</a></dd>
+			<dd><a href="/web/20120516090317/http://www.flickr.com/services/">Application Garden</a></dd>
+			<dd><a href="/web/20120516090317/http://www.flickr.com/services/api/">Documentation API</a></dd>
+			<dd><a href="/web/20120516090317/http://code.flickr.com/">Blog de développeur</a></dd>
+			<dd><a href="/web/20120516090317/http://www.flickr.com/services/developer/">Guide du développeur</a></dd>
+		</dl>
+	</div>
+	<div class="foot-nav-col-new last">
+		<dl>			<dd><a class="ft-twitter" title="Twitter" href="/web/20120516090317/http://twitter.com/flickr"><span class="icon"></span><span class="link-text">Suivez-nous</span></a></dd>
+			<dd><a class="ft-facebook" title="Facebook" href="/web/20120516090317/http://facebook.com/flickr"><span class="icon"></span><span class="link-text">J'aime</span></a></dd>
+			
+		</dl>
+	</div>
+	
+</div>				<div id="foot-lang">
+						<ul>
+			<li><a href="/web/20120516090317/http://www.flickr.com/change_language.gne?lang=zh-hk&magic_cookie=359522dada38b632131c346b1dc17a4c" class="image_link" id="lang_zh-hk"><img src="/web/20120516090317im_/http://l.yimg.com/g/images/spaceout.gif" width="45" height="13" id="langselect_zh-hk" alt="繁體中文"></a></li>
+			<li><a href="/web/20120516090317/http://www.flickr.com/change_language.gne?lang=de-de&magic_cookie=359522dada38b632131c346b1dc17a4c">Deutsch</a></li>
+			<li><a href="/web/20120516090317/http://www.flickr.com/change_language.gne?lang=en-us&magic_cookie=359522dada38b632131c346b1dc17a4c">English</a></li>
+			<li><a href="/web/20120516090317/http://www.flickr.com/change_language.gne?lang=es-us&magic_cookie=359522dada38b632131c346b1dc17a4c">Espa&#241;ol</a></li>
+			<li><a href="/web/20120516090317/http://www.flickr.com/change_language.gne?lang=fr-fr&magic_cookie=359522dada38b632131c346b1dc17a4c" class="selected">Fran&#231;ais</a></li>
+			<li><a href="/web/20120516090317/http://www.flickr.com/change_language.gne?lang=ko-kr&magic_cookie=359522dada38b632131c346b1dc17a4c" class="image_link" id="lang_ko-kr"><img src="/web/20120516090317im_/http://l.yimg.com/g/images/spaceout.gif" width="23" height="13" id="langselect_ko-kr" alt="한글"></a></li>
+			<li><a href="/web/20120516090317/http://www.flickr.com/change_language.gne?lang=it-it&magic_cookie=359522dada38b632131c346b1dc17a4c">Italiano</a></li>
+			<li><a href="/web/20120516090317/http://www.flickr.com/change_language.gne?lang=pt-br&magic_cookie=359522dada38b632131c346b1dc17a4c">Portugu&#234;s</a></li>
+			<li><a href="/web/20120516090317/http://www.flickr.com/change_language.gne?lang=vn-vn&magic_cookie=359522dada38b632131c346b1dc17a4c">Tiếng Việt</a></li>			<li class="last"><a href="/web/20120516090317/http://www.flickr.com/change_language.gne?lang=id-id&magic_cookie=359522dada38b632131c346b1dc17a4c">Bahasa Indonesia</a></li>					</ul>
+			</div>
+			<div id="foot-legalsleeze">
+				<div>
+					<a href="/web/20120516090317/http://www.flickr.com/help/terms/">Conditions d'utilisation</a> <span style="color: #eee;">|</span> 
+					<a href="/web/20120516090317/http://www.flickr.com/help/privacy-policy/">Confidentialité</a> <span style="color: #eee;">|</span>
+					<a href="/web/20120516090317/http://safely.yahoo.com/">Yahoo! plus sûr</a>					 <span style="color: #eee;">|</span> <a href="/web/20120516090317/http://info.yahoo.com/legal/us/yahoo/copyright/en-us/">Propriété intellectuelle</a>				</div>
+				<div>
+					Copyright © 2012 Yahoo! Inc. Tous droits réservés. 				</div>
+			</div>
+			</div>
+	</div>
+
+<div id="global-dialog-background"></div>
+
+
+
+
+
+
+
+<div id="page-gen"><!-- page generated by www138 (in mud) at 02:03:17 05/16/12 in 139ms --></div>
+
+
+ 
+
+
+
+
+			
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--beacons: 0 -->
+
+
+
+
+
+
+
+
+		<script>
+	(function() {
+				
+
+	
+		
+	
+F.intl = 'fr-fr';
+
+var yconf = {"flickr":{"flags":{"enable_grease":true,"enable_advanced_gestures":true,"enable_advanced_gestures_lightbox":true,"enable_fave_keyboard_shortcut":true,"enable_sets_keyboard_shortcut":true,"enable_faves_manage":true,"enable_galleries_context":true,"enable_rapid_tracking":true,"enable_groups_keyboard_shortcut":true,"enable_gallery_keyboard_shortcut":true,"enable_addperson_keyboard_shortcut":true,"enable_tags_keyboard_shortcut":true,"enable_comments_keyboard_shortcut":true,"enable_sitekey_fetcher":true,"enable_keyboard_shortcut_legend":true,"enable_keyboard_shortcut_legend_keyboard_layouts":true,"enable_keyboard_shortcuts":true,"enable_faves_page_flanal":true,"enable_viewing_party_ie9_support_messages":true,"enable_facebook_2":true,"enable_touch_lightbox_searchified":true,"enable_tag_selecta_uploadr":true,"enable_exif_thumbs":true,"enable_retina_justified":true,"aviary_photo_editing":true,"enable_jsfail_detection":true,"enable_farm_timing_sampling":true,"enable_high_res_pref":true,"enable_liquid_everything":true},"farm_samples":{"f1":4,"f2":5,"f3":15,"f4":20,"f5":20,"f6":20,"f7":30,"f8":70,"f9":70,"f10":70},"is_zeus":true,"justified_row_height":210,"lang":"fr-fr","photo_root":"/web/20120516090317/http://farm.staticflickr.com\/","site_root":"/web/20120516090317/http://www.flickr.com","images_root":"/web/20120516090317/http://l.yimg.com\/g\/images","intl_images_root":"/web/20120516090317/http://l.yimg.com\/g\/images\/fr-fr","int2lang":{"1":"en-us","2":"fr-fr","3":"es-us","4":"de-de","5":"it-it","6":"pt-br","7":"ko-kr","9":"zh-hk","13":"vn-vn","14":"id-id"},"search":{"search_default":"","textsearch_enabled":true,"search_scope":"all"},"photos":[],"contact_limit":3000,"server_timestamp":1337158997,"magic_cookie":"359522dada38b632131c346b1dc17a4c","filmstrips":{"preload_page_count":2,"photos_per_page":4,"container":"#sidebar"},"notes":{"can_add_note":false,"can_add_person":false,"ratio":0,"count":0,"max_count":100},"video_player_version":"109786","lightbox":{"enable":false,"enable_faves":true,"enable_comments":true,"node_prune_threshold":50,"node_prune_amount":10,"position_preload_limit":10,"position_preload_threshold":5,"image_preload_limit":2,"hd_default":false,"video_autoplay":true,"enable_mobile_lightbox":true,"enable_mobile_lightbox_pinch_zoom":true,"enable_fullscreen":true},"max_photo_ids_per_api_call":20,"flickr_api_uri_direct":"/web/20120516090317/http://api.flickr.com\/services\/rest\/","user":{"user_ok":false,"useragent_fully_supported":true},"printing":{"use_printcart":true,"snapfish_cart_url":"/web/20120516090317/http://www.snapfish.com\/flickrentry\/"},"sharing":[],"nav_selecta":{"additional_sections":[{"name":"Conditions d'utilisation","sectionType":"text","url":"\/help\/terms\/"},{"name":"Confidentialit\u00e9","sectionType":"text","url":"\/help\/privacy-policy\/"},{"name":"Propri\u00e9t\u00e9 intellectuelle","sectionType":"text","url":"/web/20120516090317/http://info.yahoo.com\/legal\/us\/yahoo\/copyright\/en-us\/"}]},"people":{"api_url":"","can_only_add_self":true},"tags":{"api_url":""}},"flickrAPI":{"flickr_api_uri":"\/services\/rest\/","api_key":"1713ce7dcf4bb4d5e1acdd1bdce8df28","auth_hash":"359522dada38b632131c346b1dc17a4c","auth_token":"","secret":"7a88128cb46cfe57"},"flickrMap":{"generatedInYconf":true,"enable_alternate_tiles_plugin":1,"nokia_slippy_tile_host":"maptile.lbs.ovi.com","nokia_slippy_tile_path":"maptiler\/v2\/maptile\/","nokia_slippy_tile_version":"newest","nokia_tile_app_id":"jFUN9E0JFN_TXnDyO88h","nokia_tile_api_token":"XoOs1zgg22N_l6qNMEKs-A"},"yui2":"2.5.2","loadOptional":false,"combine":true,"root":"","base":"/web/20120516090317/http://l.yimg.com\/g\/combo\/1\/3.5.0?","comboBase":"/web/20120516090317/http://l.yimg.com\/g\/combo\/1\/3.5.0?","workerBase":"\/combo\/1\/3.5.0?","maxURLLength":1999,"dev":false,"debug":false,"modules":{"account-order-transjax":{"path":"j\/.IR-order-.C-.CJ.A.vYVDi","requires":["transjax-base","yui-base"],"ext":false},"account-order-zeus":{"path":"j\/.IR-order-.D.A.v21Tee","requires":["account-order-transjax","io-base","sprintf","yui-base"],"ext":false},"account-rules":{"path":"j\/.IR-rules.A.vY7UX","requires":["dd-constrain","dd-drop","dd-proxy","event","flickr-dialog-confirmation","gallery-flickr-api","node","yui-base"],"ext":false},"ad-masker":{"path":"j\/ad-masker.A.vUFeV","requires":["context-manager","node","yui-base"],"ext":false},"add-to-dialog-css":{"path":"c\/c_add-to-.W-.D.BC.vYjx6","type":"css","ext":false},"addressbook":{"path":"j\/.HE.A.v22NwB","requires":["better-throttle","event","gallery-flickr-api","io","node","yui-base"],"ext":false},"autocomplete-2-5-1":{"path":"j\/.CM\/.BA_2.5.1-.D.A.vPzut","requires":["yui2-datasource","yui2-dom","yui2-event","yui2-yahoo"],"ext":false},"aviary-editor-frame-css":{"path":"c\/c_aviary-.GZor-frame.BC.v238Ri","type":"css","ext":false},"aviary-editor-frame-transjax":{"path":"j\/aviary-.GZor-frame-.C-.CJ.A.v22w9B","requires":["transjax-base","yui-base"],"ext":false},"aviary-editor-frame":{"path":"j\/aviary-.GZor-frame.A.v22YPa","requires":["base","aviary-editor-frame-css","aviary-editor-frame-transjax","event","flickr-dialog-frame","flickr-dialog-spinner","yui-base"],"ext":false},"beehive-contact-suggestions":{"path":"j\/.IT-.FF-.IL.A.v22NwB","requires":["anim","beehive-contact-suggestions-transjax","contact-changer","gallery-flickr-api","node","yui-base"],"ext":false},"beehive-contact-suggestions-transjax":{"path":"j\/.IT-.FF-.IL-.C-.CJ.A.vR9sk","requires":["transjax-base","yui-base"],"ext":false},"better-throttle":{"path":"j\/.EH-.EB.A.vWJ4i","requires":["yui-base","yui-later"],"ext":false},"bitmap-text":{"path":"j\/.Z-.DK-.D.A.vLQEp","requires":["yui-base"],"ext":false},"bitmap-type-silkscreen":{"path":"j\/.Z-.DJ-.BJ.A.vLQEp","requires":["yui-base"],"ext":false},"boomerang":{"path":"j\/boomerang.A.v235xV","requires":["yui-base"],"ext":false},"box-host":{"path":"j\/box-.DG.A.vU69k","requires":["event-mousedrag","math","node","yui-base"],"ext":false},"bo-selecta":{"path":"j\/.HO-.D.A.v22NwB","requires":["anim","autocomplete-2-5-1","bo-selecta-css","bo-selecta-transjax","event","event-custom","gallery-flickr-api","io-base","node","string-filters","yui-base"],"ext":false},"bo-selecta-3":{"path":"j\/.HO-3.A.v23eGX","requires":["anim","autocomplete","bo-selecta-3-css","bo-selecta-global-search-datasource","bo-selecta-transjax","datasource-function","event","event-custom","gallery-flickr-api","image-fader","io-base","node","string-filters","yui-base"],"optional":["contact-changer"],"ext":false},"bo-selecta-css":{"path":"c\/c_.HO-.D.BC.vSJiV","type":"css","ext":false},"bo-selecta-3-css":{"path":"c\/c_.HO-3.BC.v223Np","type":"css","ext":false},"bo-selecta-global-search-datasource":{"path":"j\/.HO-.X-.CA-.BYsource.A.v22NwB","requires":["bo-selecta-transjax","datasource-local","gallery-flickr-api","yui-base"],"ext":false},"bo-selecta-transjax":{"path":"j\/.HO-.C-.CJ.A.vT2dX","requires":["transjax-base","yui-base"],"ext":false},"cache-simple":{"path":"j\/.EJ-.GK.A.vS6ox","requires":["yui-base"],"ext":false},"comscore":{"path":"j\/comscore.A.v22NTi","ext":false},"contact-changer":{"path":"j\/.FF-.FG-.D.A.vXp7P","requires":["contact-changer-css","contact-changer-transjax","event-custom","event-delegate","gallery-flickr-api","global-dialog","io-base","yui-base"],"ext":false},"contact-changer-css":{"path":"c\/c_.FF-.FG-.D.BC.vQmmc","type":"css","ext":false},"contact-changer-transjax":{"path":"j\/.FF-.FG-.C-.CJ.A.vLpu4","requires":["transjax-base","yui-base"],"ext":false},"context-data":{"path":"j\/.H-.BY.A.v237bK","requires":["event-custom","gallery-flickr-api","photo-data","urls","yui-base"],"ext":false},"context-manager":{"path":"j\/.H-.K.A.vUjRa","requires":["event-custom","yui-base"],"ext":false},"dataview":{"path":"j\/.BY.JB.A.vY5eM","requires":["yui-base"],"ext":false},"defer-images":{"path":"j\/.GI-.GC.A.v232Gp","requires":["node-visibility","retry-image-on-error","yui-base"],"ext":false},"dejaview":{"path":"j\/deja.JB-.D.A.vNstM","requires":["cookie","yui-base"],"ext":false},"editr":{"path":"j\/.GZr.A.v23aHV","requires":["boomerang","context-manager","editr-edit-panel","editr-errors","editr-grid","editr-publish-dialog","editr-toolbar","event-base","feature-tour","health-check","gallery-popover","polyfills-placeholder","yui-base"],"optional":["editr-file-picker","editr-photo-picker","editr-upload-queue","flickr-dialog"],"ext":false},"editr-data-base":{"path":"j\/.GZr-.BY-.BL.A.v22pXZ","requires":["array-extras","event-custom","yui-base"],"ext":false},"editr-data-people":{"path":"j\/.GZr-.BY-.L.A.vZXG4","requires":["editr-data-base","type-cast","yui-base"],"ext":false},"editr-data-photos":{"path":"j\/.GZr-.BY-.EC.A.v22vuF","requires":["editr-data-base","type-cast","yui-base"],"ext":false},"editr-data-sets":{"path":"j\/.GZr-.BY-sets.A.v22RFn","requires":["editr-data-photos","editr-data-base","type-cast","yui-base"],"ext":false},"editr-edit-panel":{"path":"j\/.GZr-.GZ.IC.A.v22YEx","requires":["better-throttle","editr-data-photos","editr-edit-panel-tooltip","editr-edit-panel-owner-settings","editr-edit-panel-people","editr-edit-panel-sets","editr-edit-panel-tags","editr-edit-panel-title-description","editr-edit-panel-transjax","editr-grid","event-base","substitute","string-filters","yui-base"],"ext":false},"editr-edit-panel-component":{"path":"j\/.GZr-.GZ.IC-component.A.v22jGP","requires":["event-base","keyboard-shortcut-manager","yui-base"],"ext":false},"editr-edit-panel-location":{"path":"j\/.GZr-.GZ.IC-.BR.A.v21Cze","requires":["editr-data-photos","editr-edit-panel-component","editr-edit-panel-transjax","yui-base"],"ext":false},"editr-edit-panel-owner-settings":{"path":"j\/.GZr-.GZ.IC-.BK-.FR.A.v22JoX","requires":["editr-data-photos","editr-edit-panel-component","editr-edit-panel-transjax","yui-base"],"ext":false},"editr-edit-panel-people":{"path":"j\/.GZr-.GZ.IC-.L.A.v22AiZ","requires":["bo-selecta-3","editr-data-people","editr-data-photos","editr-edit-panel-component","editr-edit-panel-transjax","event-base","flickr-dialog","photo-keyboard-shortcuts-transjax","photo-people-transjax","string-filters","yui-base"],"ext":false},"editr-edit-panel-sets":{"path":"j\/.GZr-.GZ.IC-sets.A.v231Hv","requires":["editr-data-photos","editr-data-sets","editr-edit-panel-tooltip","editr-edit-panel-transjax","event-base","flickr-dialog","keyboard-shortcut-manager","string-filters","yui-base"],"ext":false},"editr-edit-panel-tags":{"path":"j\/.GZr-.GZ.IC-tags.A.v22Xd4","requires":["editr-data-photos","editr-edit-panel-transjax","event-base","tag-selecta","yui-base"],"ext":false},"editr-edit-panel-title-description":{"path":"j\/.GZr-.GZ.IC-title-description.A.v22X2H","requires":["better-throttle","editr-data-photos","editr-edit-panel-transjax","event-base","focus-tracker","yui-base"],"ext":false},"editr-edit-panel-tooltip":{"path":"j\/.GZr-.GZ.IC-tooltip.A.v23ctD","requires":["editr-edit-panel-tooltip-css","editr-edit-panel-tooltip-transjax","event-base","gallery-popover","yui-base"],"ext":false},"editr-edit-panel-tooltip-css":{"path":"c\/c_.GZr-.GZ.IC-tooltip.BC.v22oAF","type":"css","ext":false},"editr-edit-panel-tooltip-transjax":{"path":"j\/.GZr-.GZ.IC-tooltip-.C-.CJ.A.v22HRV","requires":["transjax-base","yui-base"],"ext":false},"editr-edit-panel-transjax":{"path":"j\/.GZr-.GZ.IC-.C-.CJ.A.v231Ke","requires":["transjax-base","yui-base"],"ext":false},"editr-errors":{"path":"j\/.GZr-errors.A.v22FbK","requires":["editr-data-photos","yui-base"],"ext":false},"editr-exif":{"path":"j\/.GZr-.GO.A.v23iKr","requires":["editr-data-photos","exif-thumbnail-extractor","datatype-xml","worker","yui-base"],"ext":false},"editr-file-picker":{"path":"j\/.GZr-file-picker.A.v23iVM","requires":["datatype","editr-data-photos","editr-exif","flickr-dialog","gallery-flickr-api","health-check","md5","string-filters","uploader","yui-base"],"ext":false},"editr-grid":{"path":"j\/.GZr-grid.A.v23iqt","requires":["editr-grid-transjax","editr-data-photos","event-custom","editr-zoom","editr-errors","flickr-dialog","focus-tracker","gallery-popover","menus","yui-base"],"optional":["editr-upload-queue"],"ext":false},"editr-grid-transjax":{"path":"j\/.GZr-grid-.C-.CJ.A.v23hLx","requires":["transjax-base","yui-base"],"ext":false},"editr-photo-picker":{"path":"j\/.GZr-.B-picker.A.vZW9p","requires":["editr-data-photos","flickr-dialog-spinner","flickr-geo","gallery-flickr-api","yui-base"],"ext":false},"editr-publish-dialog":{"path":"j\/.GZr-publish-.W.A.v236DH","requires":["editr-publisher","editr-publisher-transjax","editr-upload-queue","event-base","event-custom","flickr-dialog","gallery-flickr-api","health-check","yui-base"],"ext":false},"editr-publisher":{"path":"j\/.GZr-publisher.A.v23gKV","requires":["editr-data-people","editr-data-photos","editr-data-sets","editr-errors","editr-publisher-transjax","editr-upload-queue","event-base","event-custom","flickr-dialog","gallery-flickr-api","health-check","yui-base"],"ext":false},"editr-publisher-transjax":{"path":"j\/.GZr-publisher-.C-.CJ.A.v23h4a","requires":["transjax-base","yui-base"],"ext":false},"editr-toolbar":{"path":"j\/.GZr-toolbar.A.v23iHH","requires":["editr-grid","menus","yui-base"],"ext":false},"editr-upload-queue":{"path":"j\/.GZr-upload-.CT.A.v239X6","requires":["editr-data-photos","editr-errors","editr-file-picker","editr-publisher","event-custom","gallery-flickr-api","health-check","json","yui-base"],"ext":false},"editr-zoom":{"path":"j\/.GZr-zoom.A.v23foB","requires":["editr-data-photos","editr-file-picker","event-base","event-custom","flickr-dialog","node-event-html5","yui-base"],"ext":false},"exif-extractor":{"path":"j\/.GO-.IN.A.v23fNK","requires":["exif-extractor-tags","xmp-extractor","yui-base"],"ext":false},"exif-extractor-tags":{"path":"j\/.GO-.IN-tags.A.v21yYB","requires":["yui-base"],"ext":false},"exif-thumbnail-extractor":{"path":"j\/.GO-.IM-.IN.A.vWJcV","requires":["yui-base"],"ext":false},"event-annotations":{"path":"j\/.G-.BD.A.vNHST","requires":["yui-base"],"ext":false},"event-mousedrag":{"path":"j\/.G-.BO.A.vWNQT","requires":["event-annotations","event-custom-complex","event-synthetic","node","yui-base","yui-throttle"],"ext":false},"fave-star":{"path":"j\/.CX-.CY.A.vYjx6","requires":["anim","node","yui-base"],"ext":false},"farm_timing":{"path":"j\/farm_.FZ.A.v23iXv","requires":["node","yui-base","io","event"],"ext":false},"feature-tour":{"path":"j\/feature-.DA.A.v22Vxv","requires":["anim","cookie","dom","event","photo","feature-tour-css","feature-tour-transjax","yui-base"],"ext":false},"feature-tour-css":{"path":"c\/c_feature-.DA.BC.v22Vxv","type":"css","ext":false},"feature-tour-transjax":{"path":"j\/feature-.DA-.C-.CJ.A.v22t7K","requires":["transjax-base","yui-base"],"ext":false},"flanal":{"path":"j\/.IU.A.vWvCB","requires":["yui-base"],"optional":["io"],"ext":false},"flapid":{"path":"j\/flapid.A.vT5pr","requires":["gallery-flickr-api","yui-base"],"ext":false},"flickr":{"path":"j\/.J-.D.A.v21B4i","requires":["flickr-tooltips","personmenu","yui-base"],"optional":["gallery-flickr-api","share-this-v3-menu"],"ext":false},"flickr-dialog":{"path":"j\/.IZ.A.vXokZ","requires":["flickr-dialog-alert","flickr-dialog-confirmation","flickr-dialog-destructive-confirmation","flickr-dialog-frame","flickr-dialog-short-message","flickr-dialog-spinner","yui-base"],"ext":false},"flickr-dialog-alert":{"path":"j\/.IZ-alert.A.vYz1K","requires":["flickr-dialog-base","substitute","yui-base"],"ext":false},"flickr-dialog-base":{"path":"j\/.IZ-.BL.A.v2271B","requires":["attribute","better-throttle","context-manager","event","event-custom","focus-tracker","flickr-dialog-css","global-dialog-transjax","keyboard-shortcut-manager","node","substitute","yui-base"],"ext":false},"flickr-dialog-confirmation":{"path":"j\/.IZ-confirmation.A.vYzPi","requires":["flickr-dialog-base","substitute","yui-base"],"ext":false},"flickr-dialog-css":{"path":"c\/c_.IZ.BC.vZbk2","type":"css","ext":false},"flickr-dialog-destructive-confirmation":{"path":"j\/.IZ-destructive-confirmation.A.v227uc","requires":["flickr-dialog-base","yui-base"],"ext":false},"flickr-dialog-frame":{"path":"j\/.IZ-frame.A.vXqP6","requires":["flickr-dialog-base","yui-base"],"ext":false},"flickr-dialog-geo-css":{"path":"c\/c_.IZ-geo.BC.vZP3k","type":"css","ext":false},"flickr-dialog-geo":{"path":"j\/.IZ-geo.A.vZP3k","requires":["flickr-dialog-base","flickr-dialog-geo-css","flickr-map2","yui-base"],"ext":false},"flickr-dialog-infinite-spinner-css":{"path":"c\/c_.IZ-infinite-spinner.BC.v215mg","type":"css","ext":false},"flickr-dialog-infinite-spinner":{"path":"j\/.IZ-infinite-spinner.A.v21TaM","requires":["flickr-dialog-base","flickr-dialog-infinite-spinner-css","yui-base","html5-balls"],"ext":false},"flickr-dialog-short-message":{"path":"j\/.IZ-short-message.A.vYz1K","requires":["flickr-dialog-base","substitute","yui-base"],"ext":false},"flickr-dialog-spinner":{"path":"j\/.IZ-spinner.A.vXUzr","requires":["flickr-dialog-base","yui-base"],"ext":false},"flickr-gallery-comments":{"path":"j\/.J-.FW-.O.A.vY4GK","requires":["anim","anim-scroll","context-manager","dejaview","event-custom","event-delegate","formatting-tips-css","gallery-flickr-api","global-dialog","history-manager","input-hint","io-form","node","node-visibility","photo-comments-transjax","swfobject","yui-base"],"ext":false},"flickr-gallery-gallery-owner":{"path":"j\/.J-.FW-.FW-.BK.A.vVtRn","requires":["dd-drop","dd-proxy","event","flickr-gallery-gallery-owner-transjax","flickr-gallery-photo-remover","insitu","node","yui-base"],"ext":false},"flickr-gallery-gallery-owner-actions-menu":{"path":"j\/.J-.FW-.FW-.BK-.IS-.BB.A.vVtRn","requires":["event","gallery-popover","menus","node","yui-base"],"optional":["flickr-gallery-gallery-owner"],"ext":false},"flickr-gallery-gallery-owner-transjax":{"path":"j\/.J-.FW-.FW-.BK-.C-.CJ.A.vUnPz","requires":["transjax-base","yui-base"],"ext":false},"flickr-gallery-keyboard-shortcuts":{"path":"j\/.J-.FW-.HZs.A.vXp7P","requires":["anim","anim-scroll","better-throttle","event","flickr-gallery-keyboard-shortcuts-transjax","keyboard-shortcut-manager","node","node-visibility","yui-base"],"ext":false},"flickr-gallery-keyboard-shortcuts-transjax":{"path":"j\/.J-.FW-.HZs-.C-.CJ.A.vUDUk","requires":["transjax-base","yui-base"],"ext":false},"flickr-gallery-photo-owner":{"path":"j\/.J-.FW-.B-.BK.A.vVtRn","requires":["event","flickr-gallery-photo-remover","node","yui-base"],"ext":false},"flickr-gallery-photo-remover":{"path":"j\/.J-.FW-.B-.IP.A.vUus4","requires":["event","flickr-gallery-photo-remover-transjax","gallery-flickr-api","global-dialog","node","yui-base"],"ext":false},"flickr-gallery-photo-remover-transjax":{"path":"j\/.J-.FW-.B-.IP-.C-.CJ.A.vUioF","requires":["transjax-base","yui-base"],"ext":false},"flickr-geo":{"path":"j\/.J-geo.A.vZWAg","requires":["io","yui-base"],"ext":false},"flickr-location-search":{"path":"j\/.J_.BR_.CA.A.vTd1P","requires":["event","node","query-string-args","yui-base"],"ext":false},"flickr-map":{"path":"j\/.J-map.A.v23iNT","requires":["flickr-map-transjax","base","selector-css3","slider","gallery-flickr-api","photo","dragdrop","dd-drag","flickr-map-css","flickr-map-css-intl","excanvas","json","gallery-storage-lite","better-throttle","selector-circle","yui-base"],"ext":false},"flickr-map2":{"path":"j\/.J-map2.A.vZLCF","requires":["flickr-map-transjax","base","selector-css3","slider","dragdrop","dd-drag","flickr-map-css","cookie","context-manager","keyboard-shortcut-manager","flickr-geo","yui-base","event"],"ext":false},"flickr-map-provider-ymap":{"path":"j\/.J-.IK-ymap.A.v231xa","requires":["ymap","yui-base","yui2_5-yahoo","yui2_5-event","yui2_5-dom","yui2_5-animation","yui2_5-dragdrop"],"ext":false},"flickr-map-provider-bing":{"path":"j\/.J-.IK-bing.A.vRygn","requires":["bing_map","yui-base"],"ext":false},"flickr-map-provider-ovi":{"path":"j\/.J-.IK-ovi.A.v21obK","requires":["yui-base"],"ext":false},"flickr-map-provider-gmap":{"path":"j\/.J-.IK-gmap.A.vZg4a","requires":["yui-base"],"ext":false},"flickr-map-provider-flickr_osm":{"path":"j\/.J-.IK-.J_osm.A.v23jaz","requires":["yui-base"],"ext":false},"flickr-map-transjax":{"path":"j\/.J-map-.C-.CJ.A.vWtST","requires":["transjax-base","yui-base"],"ext":false},"flickr-map-css":{"path":"c\/c_.J-map.BC.v21obK","type":"css","ext":false},"flickr-map-css-intl":{"path":"c\/c_.J-map-.CJ.BC.vPfWB","type":"css","ext":false},"flickr-nav":{"path":"j\/.J_nav.A.vZiDa","requires":["event","node","context-manager","yui-base"],"ext":false},"flickr-overlay-css":{"path":"c\/c_.J-overlay-.BL.BC.v21tNB","type":"css","ext":false},"flickr-overlay-base":{"path":"j\/.J-overlay-.BL.A.v21tNB","requires":["attribute","better-throttle","context-manager","event","event-custom","focus-tracker","flickr-overlay-css","keyboard-shortcut-manager","node","substitute","yui-base"],"ext":false},"flickr-page-timing":{"path":"j\/.J_.GF_.FZ.A.v22Xbk","requires":["event","node","yui-base"],"ext":false},"flickr-printing":{"path":"j\/.J_.FD.A.vU6PZ","requires":["node","event","io","gallery-flickr-api","event-delegate","global-dialog","sprintf","flickr-printing-css","flickr-printing-transjax","flickr-tooltips","yui-base"],"ext":false},"flickr-printing-css":{"path":"c\/c_.J_.FD_.D.BC.vMaXn","type":"css","ext":false},"flickr-printing-transjax":{"path":"j\/.J_.FD-.C-.CJ.A.vNwWp","requires":["transjax-base","yui-base"],"ext":false},"flickr-tagrs":{"path":"j\/.BF_.D.A.v21Nyx","requires":["event","event-delegate","flickr-tagrs-transjax","node","node-visibility","photo","query-string-args","yui-base"],"ext":false},"flickr-tagrs-transjax":{"path":"j\/.BF_.D-.C-.CJ.A.vPGYX","requires":["transjax-base","yui-base"],"ext":false},"flickr-tooltips":{"path":"j\/.J-.GA.A.vThpZ","requires":["event","event-delegate","yui-base"],"ext":false},"focus-tracker":{"path":"j\/.CV-.CH.A.v22DsK","requires":["event","node","yui-base"],"ext":false},"formatting-tips-css":{"path":"c\/c_.EN_.EQ_.D.BC.vPVcz","type":"css","ext":false},"gallery-boomr":{"path":"j\/.FW-boomr.A.vS9f4","requires":["lang","yui-base"],"ext":false},"gallery-calendar":{"path":"j\/.FW-.IO.A.vXyki","requires":["gallery-calendar-transjax","gallery-popover","node","yui-base"],"ext":false},"gallery-calendar-transjax":{"path":"j\/.FW-.IO-.C-.CJ.A.vXh6V","requires":["transjax-base","yui-base"],"ext":false},"gallery-flickr-api":{"path":"j\/.J_api.A.v23gzz","requires":["dump","event","io-xdr","json-parse","yui-base"],"ext":false},"gallery-history-lite":{"path":"j\/.FW-.CE-.GH.A.vL4in","requires":["event-custom","event-custom-complex","node","yui-base"],"ext":false},"gallery-popover":{"path":"j\/.FW-.HN.A.v22W8Z","requires":["event-custom","node","overlay","yui-base"],"ext":false},"gallery-popover-css":{"path":"c\/c_.FW-.HN.BC.v2237K","type":"css","ext":false},"gallery-storage-lite":{"path":"j\/.FW-.FX-.GH.A.vTo82","requires":["event-base","event-custom","event-custom-complex","json","yui-base"],"ext":false},"geo-exif-backfill-transjax":{"path":"j\/geo-.GO-.IF-.C-.CJ.A.vXkce","requires":["transjax-base","yui-base"],"ext":false},"geofences-geopanel-css":{"path":"c\/c_.IA-.IB.BC.vXjHD","type":"css","ext":false},"geofences-geopanel-transjax":{"path":"j\/.IA-.IB-.C-.CJ.A.vXjvz","requires":["transjax-base","yui-base"],"ext":false},"geofences-geopanel":{"path":"j\/.IA-.IB.A.v23iMa","requires":["geofences-geopanel-transjax","geofences-geopanel-css","geopanel","global-dialog","map-pinwin","yui-base"],"ext":false},"geofences":{"path":"j\/.IA.A.vWZSx","requires":["base","yui-base"],"optional":["gallery-flickr-api"],"ext":false},"geofences-apply-panel":{"path":"j\/.IA.IE.IC.A.vXjvz","requires":["anim","event","event-custom","gallery-flickr-api","geofences","geofences-transjax","global-dialog","io","node","node-visibility","yui-base"],"optional":["geofences-geopanel"],"ext":false},"geofences-apply-progress":{"path":"j\/.IA.IE.ID.A.vXa62","requires":["better-throttle","event-custom","gallery-flickr-api","geofences","yui-base"],"ext":false},"geofences-list-view":{"path":"j\/.IA-.CZ-.JB.A.vX1fX","requires":["better-throttle","event","event-custom","geofences-geopanel","geofences","geofences-apply-panel","geofences-apply-progress","global-dialog","io","node","yui-base"],"optional":["anim"],"ext":false},"geofences-prefs-map":{"path":"j\/.IA-prefs-map.A.vXW1c","requires":["node","event","css3pie","flickr-map","geofences","geofences-transjax","geofences-prefs-map-transjax","map-pinwin","yui-base"],"ext":false},"geofences-prefs-map-transjax":{"path":"j\/.IA-prefs-map-.C-.CJ.A.v21yYB","requires":["transjax-base","yui-base"],"ext":false},"geofences-transjax":{"path":"j\/.IA-.C-.CJ.A.vX5dg","requires":["transjax-base","yui-base"],"ext":false},"geopanel-css":{"path":"c\/c_.IB.BC.vXjM6","type":"css","ext":false},"geopanel":{"path":"j\/.IB.A.v22UwT","requires":["event","global-dialog","geopanel-css","yui-base"],"optional":["autocomplete-2-5-1","flickr-map","gallery-flickr-api"],"ext":false},"getty":{"path":"j\/.FI_new.A.vT8GP","requires":["anim","dom","event","gallery-flickr-api","node","yui-base"],"ext":false},"global-dialog":{"path":"j\/.X-.W-.D.A.vXp7P","requires":["context-manager","event","event-custom","event-delegate","event-key","focus-tracker","global-dialog-css","global-dialog-transjax","keyboard-shortcut-manager","node","yui-base"],"ext":false},"global-dialog-css":{"path":"c\/c_.X-.W-.D.BC.vZF8H","type":"css","ext":false},"global-dialog-transjax":{"path":"j\/.X-.W-.C-.CJ.A.vKPQk","requires":["transjax-base","yui-base"],"ext":false},"gn-model":{"path":"j\/gn-.JA.A.v22GJp","requires":["model","io","yui-base"],"ext":false},"gn-you-model":{"path":"j\/gn-you-.JA.A.v22GEX","requires":["model","yui-base","gn-model"],"ext":false},"gn-explore-model":{"path":"j\/gn-.FP-.JA.A.v22GJp","requires":["model","yui-base","gn-model"],"ext":false},"gn-following-model":{"path":"j\/.JF.A.v22F8i","requires":["model","gn-model","yui-base"],"ext":false},"gn-gear-model":{"path":"j\/gn-gear-.JA.A.v22naV","requires":["model","gn-model","yui-base"],"ext":false},"gn-following-view":{"path":"j\/gn-.JD-.JB.A.v22FiD","requires":["view","handlebars","gn-you-model","yui-base"],"ext":false},"gn-explore-view":{"path":"j\/gn-.FP-.JB.A.v22GJp","requires":["view","handlebars","gn-you-model","yui-base"],"ext":false},"gn-gear-view":{"path":"j\/gn-gear-.JB.A.v22naV","requires":["view","handlebars","gn-you-model","yui-base"],"ext":false},"gn-you-view":{"path":"j\/gn-you-.JB.A.v22KPH","requires":["view","handlebars","gn-you-model","yui-base"],"ext":false},"gn-global-nav-view":{"path":"j\/gn-.JE.A.v231AB","requires":["view","handlebars","gn-you-model","yui-base","transition"],"ext":false},"global-nav":{"path":"j\/.JC.A.v22GJp","requires":["context-manager","event","gallery-flickr-api","gallery-storage-lite","gn-you-view","gn-you-model","gn-model","gn-gear-model","gn-gear-view","gn-following-view","gn-following-model","gn-explore-model","gn-explore-view","gn-global-nav-view","handlebars","io","model","node","substitute","yui-base","view"],"ext":false},"group-blast-insitu":{"path":"j\/.DM-blast-.DT.A.vUvsF","requires":["event","insitu","node","string-filters","yui-base"],"ext":false},"guestpass-hide":{"path":"j\/.DZ-.ET.A.vVdVR","requires":["anim","cookie","node","yui-base"],"ext":false},"grease":{"path":"j\/.HQ.A.vZqNF","requires":["event-focus","gallery-flickr-api","gallery-storage-lite","global-dialog","json","node","occult","photo-data","yui-base"],"ext":false},"grease-css":{"path":"c\/c_.HQ.BC.vZqNF","type":"css","ext":false},"health-check":{"path":"j\/health-check.A.v22qwK","requires":["event-custom","gallery-flickr-api","yui-base"],"ext":false},"history-manager":{"path":"j\/.CE-.K.A.vZPkz","requires":["event","urls","yui-base"],"ext":false},"html5-balls":{"path":"j\/html5-balls.A.v21TaM","requires":["event","urls","base","yui-base","html5-balls-css"],"ext":false},"html5-balls-css":{"path":"c\/c_html5-balls.BC.v211kv","type":"css","ext":false},"image-fader":{"path":"j\/.CW-.CU.A.vZNyK","requires":["anim","node","yui-base"],"ext":false},"infinite-scrolling-transjax":{"path":"j\/infinite-scrolling-.C-.CJ.A.v21C6D","requires":["transjax-base","yui-base"],"ext":false},"input-hint":{"path":"j\/.CN-.DD.A.vSXbt","requires":["event-focus","focus-tracker","node","yui-base"],"ext":false},"input-counter":{"path":"j\/.CN-counter.A.vUvzz","requires":["event","node","yui-base"],"ext":false},"india-disclaimer":{"path":"j\/.IH.A.vRTta","requires":["event","global-dialog","io-base","node","yui-base"],"ext":false},"insitu":{"path":"j\/.DT-.D.A.v232iZ","requires":["input-counter","dejaview","event-custom","event-key","gallery-flickr-api","insitu-transjax","json-stringify","node","string-filters","substitute","yui-base"],"optional":["anim","anim-scroll","io","photo-data"],"ext":false},"insitu-transjax":{"path":"j\/.DT-.C-.CJ.A.vTQBe","requires":["transjax-base","yui-base"],"ext":false},"jfif-extractor":{"path":"j\/jfif-.IN.A.v23fE8","requires":["yui-base"],"ext":false},"keyboard-shortcut-legend":{"path":"j\/.HZ-.HY.A.vYgRV","requires":["better-throttle","context-manager","cookie","gallery-flickr-api","global-dialog","keyboard-shortcut-legend-css","keyboard-shortcut-legend-layouts","keyboard-shortcut-legend-transjax","yui-base"],"ext":false},"keyboard-shortcut-legend-css":{"path":"c\/c_.HZ-.HY.BC.vYjx6","type":"css","ext":false},"keyboard-shortcut-legend-layouts":{"path":"j\/.HZ-.HY-layouts.A.vYgFz","requires":["keyboard-shortcut-legend-transjax","yui-base"],"ext":false},"keyboard-shortcut-legend-transjax":{"path":"j\/.HZ-.HY-.C-.CJ.A.vYgTD","requires":["transjax-base","yui-base"],"ext":false},"keyboard-shortcut-manager":{"path":"j\/.HZ-.K.A.v22wmF","requires":["context-manager","event-custom","event-focus","event-key","focus-tracker","keyboard-shortcut-legend","node","yui-base"],"optional":["photo-people-list"],"ext":false},"leaflet-css":{"path":"c\/c_leaflet.BC.v21u58","type":"css","ext":false},"leaflet":{"path":"j\/leaflet.A.v23fka","requires":["leaflet-css"],"ext":false},"lightbox":{"path":"j\/.N.A.v23hAc","requires":["anim","better-throttle","context-data","context-manager","cookie","node","event-annotations","event-custom","event-delegate","event-gestures","event-key","fave-star","gallery-flickr-api","history-manager","json","keyboard-shortcut-manager","lightbox-transjax","node-visibility","photo-context-menu","photo-transjax","photo-ywa-tracking","rapid-tracker","string-filters","swfobject","transition","urls","view-count","yui-base","yui-throttle"],"optional":["global-dialog","search-results-display-transjax"],"ext":false},"lightbox-transjax":{"path":"j\/.N-.C-.CJ.A.v2397P","requires":["transjax-base","yui-base"],"ext":false},"liquid-photo-resizer":{"path":"j\/liquid-.B-resizer.A.v233Dz","requires":["event"],"ext":false},"liquid-resizer":{"path":"j\/liquid-resizer.A.v22DzD","requires":["event"],"ext":false},"location-picker-css":{"path":"c\/c_.BR-picker.BC.vZRmP","type":"css","ext":false},"location-picker":{"path":"j\/.BR-picker.A.vZRmP","requires":["location-picker-css","keyboard-shortcut-manager","flickr-geo","event","map-pinwin","dragdrop","dd-drag","yui-base"],"ext":false},"location-selecta-css":{"path":"c\/c_.BR-.S.BC.vYRsc","type":"css","ext":false},"location-selecta":{"path":"j\/.BR-.S.A.vZPh8","requires":["location-selecta-css","keyboard-shortcut-manager","flickr-geo","event","yui-base"],"ext":false},"mail-zeus":{"path":"j\/mail-.D.A.vYGeH","requires":["mail-zeus-transjax","flickr-dialog-confirmation","event","node","yui-base"],"ext":false},"mail-zeus-transjax":{"path":"j\/mail-.D-.C-.CJ.A.vYCRa","requires":["transjax-base","yui-base"],"ext":false},"map-pinwin":{"path":"j\/map-.IV.A.vYzkH","requires":["map-pinwin-css","string-filters","yui-base"],"ext":false},"map-pinwin-css":{"path":"c\/c_map-.IV.BC.vWsVH","type":"css","ext":false},"math":{"path":"j\/.DL.A.vLPjP","requires":["yui-base"],"ext":false},"matrix-math":{"path":"j\/matrix-.DL.A.vVRWp","requires":["yui-base"],"ext":false},"md5":{"path":"j\/md5-.D.A.vXTyP","ext":false},"menus":{"path":"j\/.BBs.A.vWxVn","requires":["base","context-manager","event","event-custom","gallery-popover","keyboard-shortcut-manager","node","yui-base"],"ext":false},"motion-blur":{"path":"j\/motion-blur.A.vUD1B","requires":["node","transition","yui-base"],"ext":false},"mrpinchy":{"path":"j\/mrpinchy.A.vWCYt","requires":["node","event","event-custom","transition","urls","matrix-math","yui-base"],"ext":false},"nav-selecta":{"path":"j\/nav-.S.A.v22ZhK","requires":["bo-selecta-3","keyboard-shortcut-manager","nav-selecta-css","nav-selecta-transjax","nav-selecta-rapid","node","string-filters","yui-base"],"ext":false},"nav-selecta-css":{"path":"c\/c_nav-.S.BC.vU1S4","type":"css","ext":false},"nav-selecta-transjax":{"path":"j\/nav-.S-.C-.CJ.A.vXQok","requires":["transjax-base","yui-base"],"ext":false},"nav-selecta-rapid":{"path":"j\/nav-.S-.IY.A.v22o1c","requires":["event","rapid-tracker","yui-base"],"ext":false},"node-visibility":{"path":"j\/.CR-.DY.A.v21zQB","requires":["better-throttle","cache-simple","node","node-pluginhost","yui-base"],"optional":["anim","anim-scroll"],"ext":false},"note-data":{"path":"j\/note-.BY.A.vRjAg","requires":["base","person-data","yui-base"],"ext":false},"notification-base":{"path":"j\/notification-.BL.A.v22wAt","requires":["attribute","notification-center"],"ext":false},"notification-center":{"path":"j\/notification-center.A.v22wQg","requires":["attribute","cookie","event","event-custom","gallery-flickr-api"],"ext":false},"number":{"path":"j\/.Y.A.vSPsc","requires":["number-transjax","yui-base"],"ext":false},"number-transjax":{"path":"j\/.Y-.C-.CJ.A.vNqGk","requires":["transjax-base","yui-base"],"ext":false},"occult":{"path":"j\/.CF.A.vNC2e","requires":["node","yui-base"],"ext":false},"pagination-keyboard-shortcuts":{"path":"j\/.EG-.HZs.A.vXp7P","requires":["keyboard-shortcut-manager","node","pagination-keyboard-shortcuts-transjax","yui-base"],"ext":false},"pagination-keyboard-shortcuts-transjax":{"path":"j\/.EG-.HZs-.C-.CJ.A.vUYz6","requires":["transjax-base","yui-base"],"ext":false},"person-data":{"path":"j\/.FK-.BY.A.vRjAg","requires":["base","yui-base"],"ext":false},"personmenu":{"path":"j\/.CB-.D.A.vYCj8","requires":["anim","anim-scroll","cache-simple","event-custom","io-base","node","node-visibility","personmenu-css","personmenu-transjax","personmenu-rapid","yui-base"],"optional":["contact-changer"],"ext":false},"personmenu-css":{"path":"c\/c_.CB-.D.BC.vYjx6","type":"css","ext":false},"personmenu-transjax":{"path":"j\/.CB-.C-.CJ.A.vNwWp","requires":["transjax-base","yui-base"],"ext":false},"personmenu-rapid":{"path":"j\/.CB-.IY.A.vZzGc","requires":["event","rapid-tracker","yui-base"],"ext":false},"photo":{"path":"j\/.B-.D.A.v22FVR","requires":["context-data","context-manager","event-annotations","event-custom","event-delegate","event-key","event-mousedrag","event-mouseenter","focus-tracker","global-dialog","history-manager","keyboard-shortcut-manager","math","occult","photo-button-bar","photo-comments","photo-context-menu","photo-data","photo-filmstrip","photo-keyboard-shortcuts","photo-notes","photo-sidebar","photo-ywa-tracking","retry-image-on-error","lightbox","yahoo-ult","yui-base"],"ext":false},"photo-button-bar":{"path":"j\/.B-.T-bar.A.v23dZz","requires":["add-to-dialog-css","context-data","context-manager","event","event-custom","event-delegate","event-key","fave-star","focus-tracker","gallery-flickr-api","gallery-popover","global-dialog","keyboard-shortcut-manager","menus","node","node-event-simulate","photo-button-bar-transjax","photo-people-list","urls","yui-base"],"optional":["flickr-printing","photo-notes","photo-replace","photo-rotate","picnik"],"ext":false},"photo-button-bar-transjax":{"path":"j\/.B-.T-bar-.C-.CJ.A.v22Etn","requires":["transjax-base","yui-base"],"ext":false},"photo-comments":{"path":"j\/.B-.O.A.vYmnZ","requires":["anim","anim-scroll","context-manager","dejaview","event-custom","event-delegate","formatting-tips-css","gallery-flickr-api","global-dialog","history-manager","input-hint","io-form","node","node-visibility","photo-comments-transjax","photo-data","swfobject","yui-base"],"optional":["insitu"],"ext":false},"photo-comments-image-hiding":{"path":"j\/.B-.O-.CW-hiding.A.vTJvM","requires":["node","yui-base"],"ext":false},"photo-comments-transjax":{"path":"j\/.B-.O-.C-.CJ.A.vWuoc","requires":["transjax-base","yui-base"],"ext":false},"photo-context-menu":{"path":"j\/.B-.H-.BB.A.v23cmK","requires":["event","node","photo","photo-context-menu-css","photo-context-menu-transjax","photo-data","urls","yui-base"],"ext":false},"photo-context-menu-css":{"path":"c\/c_.B-.H-.BB.BC.vNzuF","type":"css","ext":false},"photo-context-menu-transjax":{"path":"j\/.B-.H-.BB-.C-.CJ.A.v221oK","requires":["transjax-base","yui-base"],"ext":false},"photo-data":{"path":"j\/.B-.BY.A.v22RwK","requires":["anim","base","cookie","event","gallery-flickr-api","grease","node","photo-transjax","type-cast","urls","yui-base"],"ext":false},"photo-filmstrip":{"path":"j\/.B-.M.A.vZ15c","requires":["anim","base","better-throttle","context-data","context-manager","event","event-custom","event-delegate","event-key","focus-tracker","global-dialog","image-fader","io","keyboard-shortcut-manager","node","number","photo-button-bar-transjax","photo-data","photo-filmstrip-transjax","retry-image-on-error","string-filters","transition","urls","yui-base"],"ext":false},"photo-filmstrip-transjax":{"path":"j\/.B-.M-.C-.CJ.A.vVkjx","requires":["transjax-base","yui-base"],"ext":false},"photo-geolocation":{"path":"j\/.B-.R.A.v22UwT","requires":["context-manager","global-dialog","photo","photo-geolocation-transjax","yui-base"],"optional":["autocomplete-2-5-1","flickr-map","gallery-flickr-api","photo-geolocation-css"],"ext":false},"photo-geolocation-transjax":{"path":"j\/.B-.R-.C-.CJ.A.vXt8z","requires":["transjax-base","yui-base"],"ext":false},"photo-geolocation-css":{"path":"c\/c_.B-.R.BC.vVSAk","type":"css","ext":false},"photo-geopanel":{"path":"j\/.B-.IB.A.vZXXz","requires":["yui-base"],"ext":false},"photo-group-invites":{"path":"j\/.B-.DM-.CO.A.vTKhB","requires":["context-data","gallery-flickr-api","global-dialog","node","photo","photo-group-invites-transjax","yui-base"],"ext":false},"photo-group-invites-transjax":{"path":"j\/.B-.DM-.CO-.C-.CJ.A.vU8jc","requires":["transjax-base","yui-base"],"ext":false},"photo-insitu":{"path":"j\/.B-.DT.A.vZjX2","requires":["insitu","photo","photo-data","photo-transjax","yui-base"],"ext":false},"photo-keyboard-shortcuts":{"path":"j\/.B-.HZs.A.v21yYB","requires":["context-manager","cookie","event-focus","event-key","event-simulate","focus-tracker","keyboard-shortcut-manager","node","photo-keyboard-shortcuts-transjax","yui-base"],"optional":["photo-people-list"],"ext":false},"photo-keyboard-shortcuts-transjax":{"path":"j\/.B-.HZs-.C-.CJ.A.v21yYB","requires":["transjax-base","yui-base"],"ext":false},"photo-map-display-pinwin-css":{"path":"c\/c_.B-map-.IQ-.IV.BC.vYzkH","type":"css","ext":false},"photo-map-display-pinwin":{"path":"j\/.B-map-.IQ-.IV.A.vZtQx","requires":["flickr-geo","map-pinwin","base","photo-map-display-pinwin-css","yui-base"],"ext":false},"photo-notes":{"path":"j\/.B-.BE-.D.A.v23i6v","requires":["better-throttle","bo-selecta-3","bo-selecta-transjax","box-host","event","event-annotations","event-delegate","focus-tracker","gallery-flickr-api","global-dialog","node","node-visibility","photo-notes-transjax","photo-people-controller","photo-people-transjax","string-filters","yui-base"],"optional":["note-data"],"ext":false},"photo-notes-transjax":{"path":"j\/.B-.BE-.C-.CJ.A.vYpcM","requires":["transjax-base","yui-base"],"ext":false},"photo-owner-dialogs-css":{"path":"c\/c_.B-.BK-.EO-.D.BC.vSewX","type":"css","ext":false},"photo-people-controller":{"path":"j\/.HX-.BH.A.v22NwB","requires":["event","gallery-flickr-api","dejaview","photo-people-transjax","yui-base"],"ext":false},"photo-people-list":{"path":"j\/.HX-.CZ.A.vZAee","requires":["anim","bo-selecta-3","event-delegate","global-dialog","node-visibility","photo","photo-people-controller","photo-people-transjax","string-filters","yui-base"],"optional":["photo-notes"],"ext":false},"photo-people-transjax":{"path":"j\/.HX-.C-.CJ.A.vNxQ8","requires":["transjax-base","yui-base"],"ext":false},"photo-preloader":{"path":"j\/.B-.FJ.A.v22ACX","requires":["context-data","event","yui-base"],"ext":false},"photo-replace":{"path":"j\/.B-.GQ.A.vZYPz","requires":["event","global-dialog","io","node","yui-base"],"optional":["flanal","worker"],"ext":false},"photo-rotate":{"path":"j\/.B-.GE.A.vVgGc","requires":["anim","event","gallery-flickr-api","node","photo","photo-data","photo-rotate-css","photo-rotate-transjax","yui-base"],"ext":false},"photo-rotate-css":{"path":"c\/c_.B-.GE.BC.vYx5F","type":"css","ext":false},"photo-rotate-transjax":{"path":"j\/.B-.GE-.C-.CJ.A.vPnbF","requires":["transjax-base","yui-base"],"ext":false},"photo-session-marketing":{"path":"j\/.IJ-marketing.A.vXAyB","requires":["event","gallery-flickr-api","global-dialog","node","viewing-party-invitation-creator-transjax","yahoo-web-analytics","yui-base"],"ext":false},"photo-sidebar":{"path":"j\/.HV.A.v23cqc","requires":["anim","bitmap-text","bitmap-type-silkscreen","event-custom","event-delegate","excanvas","flapid","gallery-flickr-api","node","node-visibility","photo-data","photo-sidebar-transjax","stylesheet","yui-base"],"ext":false},"photo-sidebar-transjax":{"path":"j\/.HV-.C-.CJ.A.vPKTV","requires":["transjax-base","yui-base"],"ext":false},"photo-sidebar-not-owner":{"path":"j\/.HV-.HW.A.vXfLk","requires":["gallery-flickr-api","global-dialog","photo-owner-dialogs-css","photo-sidebar","photo-sidebar-not-owner-transjax","yui-base"],"ext":false},"photo-sidebar-not-owner-transjax":{"path":"j\/.HV-.HW-.C-.CJ.A.vNwZR","requires":["transjax-base","yui-base"],"ext":false},"photo-sidebar-owner":{"path":"j\/.HV-.BK.A.vXhR2","requires":["better-throttle","context-manager","event-custom","gallery-flickr-api","global-dialog","photo-owner-dialogs-css","photo-data","photo-sidebar","photo-sidebar-owner-transjax","yui-base"],"ext":false},"photo-sidebar-owner-transjax":{"path":"j\/.HV-.BK-.C-.CJ.A.vX3nn","requires":["transjax-base","yui-base"],"ext":false},"photo-tour":{"path":"j\/.B-.DA.A.vNGEc","requires":["anim","cookie","dom","event","photo","photo-tour-transjax","yui-base"],"ext":false},"photo-tour-transjax":{"path":"j\/.B-.DA-.C-.CJ.A.vN3j4","requires":["transjax-base","yui-base"],"ext":false},"photo-transjax":{"path":"j\/.B-.C-.CJ.A.vQ7Ta","requires":["transjax-base","yui-base"],"ext":false},"photo-ywa-tracking":{"path":"j\/.B-ywa-.BW.A.vPwkH","requires":["event","yahoo-web-analytics","yui-base"],"ext":false},"photos-user-favorites":{"path":"j\/.EC-user-.FH.A.vQd5T","requires":["event","io","node","yui-base"],"ext":false},"photos-display":{"path":"j\/.EC-.IQ.A.vUYVM","requires":["photos-display-css","event","io","node","photo-data","selector-css3","photos-display-transjax","yui-base"],"ext":false},"photos-display-transjax":{"path":"j\/.EC-.IQ-.C-.CJ.A.vUYVM","requires":["transjax-base","yui-base"],"ext":false},"photos-display-css":{"path":"c\/c_.EC-.IQ.BC.vTKuF","type":"css","ext":false},"photostream-insitu":{"path":"j\/.ECtream-.DT.A.vVjPe","requires":["event","insitu","node","yui-base"],"ext":false},"picnik":{"path":"j\/.EY-.D.A.vY3sk","requires":["global-dialog","io-base","json","picnik-css","picnik-transjax","swfobject","yui-base"],"ext":false},"picnik-css":{"path":"c\/c_.EY-.D.BC.vRXiz","type":"css","ext":false},"picnik-transjax":{"path":"j\/.EY-.C-.CJ.A.vLqsX","requires":["transjax-base","yui-base"],"ext":false},"polyfills-placeholder":{"path":"j\/polyfills-placeholder.A.v22o1c","requires":["node","yui-base"],"ext":false},"popup-login":{"path":"j\/.HP.A.vXeMr","requires":["event","node","io-base","yui-base"],"ext":false},"pro-upsell-bandwidth-limit-notification":{"path":"j\/pro-upsell-bandwidth-limit-notification.A.v22wQg","requires":["flickr-dialog-confirmation","notification-base","pro-upsell-notification-transjax"],"ext":false},"pro-upsell-photo-limit-notification":{"path":"j\/pro-upsell-.B-limit-notification.A.v22xh8","requires":["flickr-dialog-confirmation","notification-base","pro-upsell-notification-transjax"],"ext":false},"pro-upsell-notification-transjax":{"path":"j\/pro-upsell-notification-.C-.CJ.A.v22xh8","requires":["transjax-base","yui-base"],"ext":false},"query-string-args":{"path":"j\/.CP-.U-.DE.A.vKEJK","requires":["yui-base"],"ext":false},"rapid-tracker":{"path":"j\/.IY-.CH.A.v22e2v","requires":["yui-base"],"ext":false},"retry-image-on-error":{"path":"j\/retry-.CW-on-error.A.v22TPv","requires":["event-base","yui-base","yui-later"],"optional":["flanal"],"ext":false},"rushmore-settings":{"path":"j\/.FS-.FR.A.v21HLX","requires":["event","event-delegate","global-dialog","io","node","yui-base"],"ext":false},"search-refer":{"path":"j\/.CA-.DX-.D.A.vT4tZ","requires":["anim","cookie","node","yahoo-ult","yui-base"],"ext":false},"search-results-display":{"path":"j\/.CA-.II.A.v23hhX","requires":["anim","anim-scroll","better-throttle","cookie","event","flanal","gallery-flickr-api","gallery-popover","global-dialog","io","keyboard-shortcut-manager","menus","node","node-visibility","pagination-keyboard-shortcuts","photo-data","search-results-display-transjax","string-filters","better-throttle","urls","yui-base"],"optional":["lightbox"],"ext":false},"search-results-display-transjax":{"path":"j\/.CA-.II-.C-.CJ.A.vYV8Z","requires":["transjax-base","yui-base"],"ext":false},"selector-circle-css":{"path":"c\/c_.GB-circle.BC.vWLRn","type":"css","ext":false},"selector-circle":{"path":"j\/.GB-circle.A.vXbxv","requires":["base","css3pie","event","selector-circle-css","yui-base"],"ext":false},"set-meta-insitu":{"path":"j\/set-meta-.DT.A.vTUoc","requires":["event","insitu","node","yui-base"],"ext":false},"share-menu-transjax":{"path":"j\/.DN-.BB-.D-.C-.CJ.A.vVvzn","requires":["transjax-base","yui-base"],"ext":false},"share-this-v3-account-settings":{"path":"j\/.HG-.IR-.FR.A.v21yYB","requires":["dom","event","global-dialog","io","io-form","querystring-stringify-simple","yui-base"],"ext":false},"share-this-v3-css":{"path":"c\/c_.HG.BC.v22fU8","type":"css","ext":false},"share-this-v3-dialog":{"path":"j\/.HG-.W.A.vXKSg","requires":["dom","event","global-dialog","io-base","node","share-menu-transjax","share-this-v3-dialog-css","share-this-v3-dialog-transjax","share-this-v3-services","yui-base"],"optional":["flanal"],"ext":false},"share-this-v3-dialog-css":{"path":"c\/c_.HG-.W.BC.vX3iV","type":"css","ext":false},"share-this-v3-dialog-transjax":{"path":"j\/.HG-.W-.C-.CJ.A.vVVDV","requires":["transjax-base","yui-base"],"ext":false},"share-this-v3-menu":{"path":"j\/.HG-.BB.A.v22auk","requires":["better-throttle","dom","event","event-custom","gallery-flickr-api","gallery-popover","global-dialog","io-base","menus","node","share-menu-transjax","share-this-v3-triggers","yui-base"],"optional":["photo-data"],"ext":false},"share-this-v3-service-blogger":{"path":"j\/.HF.HJ.A.vU5pe","requires":["share-this-v3-services","yui-base"],"ext":false},"share-this-v3-service-email":{"path":"j\/.HF.HH.A.vXp7P","requires":["bo-selecta-3","share-this-v3-services","share-this-v3-service-email-transjax","yui-base"],"ext":false},"share-this-v3-service-email-transjax":{"path":"j\/.HF.HH-.C-.CJ.A.vTPCk","requires":["transjax-base","yui-base"],"ext":false},"share-this-v3-service-facebook":{"path":"j\/.HF.HL.A.v22bcH","requires":["share-this-v3-services","yui-base"],"ext":false},"share-this-v3-service-livejournal":{"path":"j\/.HF.HT.A.vTV8i","requires":["share-this-v3-services","yui-base"],"ext":false},"share-this-v3-service-tumblr":{"path":"j\/.HF.HU.A.vVs3c","requires":["share-this-v3-services","yui-base"],"ext":false},"share-this-v3-service-twitter":{"path":"j\/.HF.HK.A.vVJx6","requires":["share-this-v3-services","share-this-v3-service-twitter-transjax","yui-base"],"ext":false},"share-this-v3-service-twitter-transjax":{"path":"j\/.HF.HK-.C-.CJ.A.vUELk","requires":["transjax-base","yui-base"],"ext":false},"share-this-v3-service-wordpress":{"path":"j\/.HF.HM.A.vVt5x","requires":["share-this-v3-services","yui-base"],"ext":false},"share-this-v3-service-yahoo-pulse":{"path":"j\/.HF.CM-.HI.A.vU1vn","requires":["share-this-v3-services","yui-base"],"ext":false},"share-this-v3-service-pinterest":{"path":"j\/.HFpinterest.A.v22VZn","requires":["share-this-v3-services","yui-base"],"ext":false},"share-this-v3-services":{"path":"j\/.HG-.HR.A.vVs3c","requires":["share-this-v3-service-blogger","share-this-v3-service-email","share-this-v3-service-facebook","share-this-v3-service-livejournal","share-this-v3-service-pinterest","share-this-v3-service-tumblr","share-this-v3-service-twitter","share-this-v3-service-wordpress","share-this-v3-service-yahoo-pulse","yui-base"],"ext":false},"share-this-v3-triggers":{"path":"j\/.HG-.HS.A.vXKTZ","requires":["event","flanal","node","share-this-v3-dialog","yui-base"],"ext":false},"sprintf":{"path":"j\/.CC.A.vVNpe","requires":["yui-base"],"ext":false},"string-filters":{"path":"j\/.U-.CG.A.v23eGX","requires":["yui-base"],"ext":false},"soup":{"path":"j\/soup.A.vZfUx","requires":["event","flanal","flickr-page-timing","io","motion-blur","node","popup-login","rapid-tracker","transition","yui-base"],"ext":false},"tag-selecta":{"path":"j\/tag-.S.A.vZj4i","requires":["anim","autocomplete","tag-selecta-css","tag-selecta-transjax","datasource-function","event","event-custom","gallery-flickr-api","image-fader","io-base","node","string-filters","yui-base"],"ext":false},"tag-selecta-css":{"path":"c\/c_tag-.S.BC.vYiGP","type":"css","ext":false},"tag-selecta-transjax":{"path":"j\/tag-.S-.C-.CJ.A.vYx98","requires":["transjax-base","yui-base"],"ext":false},"timing-average":{"path":"j\/.FZ-.JJ.A.v22o1c","requires":["cookie","event","yui-base"],"ext":false},"tour-nav":{"path":"j\/.DA-nav.A.vWSJK","requires":["anim","node","node-event-simulate","io","querystring","history","yahoo-ult","yui-base"],"ext":false},"tour-carousel":{"path":"j\/.DA-.ER.A.vN3Ux","requires":["anim","node","yui-base"],"ext":false},"touch-lightbox":{"path":"j\/touch-.N.A.v2392D","requires":["node","event","gallery-flickr-api","history-manager","context-data","context-manager","lightbox-transjax","mrpinchy","photo-transjax","rapid-tracker","transition","urls","view-count","yui-base"],"optional":["lightbox"],"ext":false},"type-cast":{"path":"j\/.DJ-cast.A.vZVnz","requires":["yui-base"],"ext":false},"transjax-base":{"path":"j\/.C-.BL.A.vPPjc","requires":["sprintf","yui-base"],"ext":false},"urls":{"path":"j\/urls.A.vYUXD","requires":["yui-base"],"ext":false},"user-refave":{"path":"j\/user-re.CX.A.vPWbt","requires":["event","gallery-flickr-api","node","yui-base"],"ext":false},"video":{"path":"j\/.DV-.D.A.vZvoc","requires":["cookie","event-custom","gallery-flickr-api","node","query-string-args","string-filters","swfobject","video-transjax","yui-base"],"ext":false},"video-masker":{"path":"j\/.DV-masker-.D.A.vSvaR","requires":["context-manager","node","yui-base"],"ext":false},"video-transjax":{"path":"j\/.DV-.D-.C-.CJ.A.v217nv","requires":["transjax-base","yui-base"],"ext":false},"view-count":{"path":"j\/.JB-count.A.v21B4i","requires":["gallery-flickr-api","json","yui-base"],"ext":false},"viewing-party-invitation-creator":{"path":"j\/.JBing-party-invitation-creator.A.vYkdK","requires":["bo-selecta-3","gallery-flickr-api","global-dialog","io-base","node","viewing-party-invitation-creator-css","viewing-party-invitation-creator-transjax","yahoo-web-analytics","zero-clipboard","yui-base"],"ext":false},"viewing-party-invitation-creator-css":{"path":"c\/c_.JBing-party-invitation-creator.BC.vWxia","type":"css","ext":false},"viewing-party-invitation-creator-transjax":{"path":"j\/.JBing-party-invitation-creator-.C-.CJ.A.vXAyB","requires":["transjax-base","yui-base"],"ext":false},"whispers":{"path":"j\/whispers.A.vUbGK","requires":["node","event","gallery-flickr-api","yui-base"],"ext":false},"woe-corrector-css":{"path":"c\/c_woe-corrector.BC.vZKva","type":"css","ext":false},"woe-corrector":{"path":"j\/woe-corrector.A.vZWAg","requires":["base","woe-corrector-css","keyboard-shortcut-manager","flickr-geo","event","yui-base"],"ext":false},"worker":{"path":"j\/.IW.A.vYkW8","requires":["base","event","yui-base"],"ext":false},"xmp-extractor":{"path":"j\/xmp-.IN.A.v22VgZ","requires":["yui-base"],"ext":false},"zero-clipboard":{"path":"j\/zero-clipboard.A.vV8nr","requires":["yui-base"],"ext":false},"swfobject":{"path":"j\/.BM.A.vSDL8","ext":false},"yahoo-ult":{"path":"j\/.CM-ult.A.vPboP","ext":false},"yahoo-web-analytics":{"path":"j\/ywa.A.vN4Ng","ext":false},"roundtrip":{"path":"j\/roundtrip.A.vXmv6","ext":false},"ymap":{"path":"j\/.FV.A.vZWmt","requires":["event-synthetic","yui2_5-animation","yui2_5-yahoo","yui2_5-event","yui2_5-dom","yui2_5-dragdrop"],"ext":false},"bing_map":{"path":"j\/bing_map_6_3.A.vRhTZ","ext":false},"yui2_5-yahoo":{"path":"j\/.CM\/.CM_2.5.1.A.vr3bk","ext":false},"yui2_5-event":{"path":"j\/.CM\/.G_2.5.1.A.vr3bk","requires":["yui2_5-yahoo"],"ext":false},"yui2_5-dom":{"path":"j\/.CM\/dom_2.5.1.A.vr3bk","requires":["yui2_5-yahoo"],"ext":false},"yui2_5-dragdrop":{"path":"j\/.CM\/.FT_2.5.1.A.vWHY8","requires":["yui2_5-dom","yui2_5-event","yui2_5-yahoo"],"ext":false},"yui2_5-animation":{"path":"j\/.CM\/.FL_2.5.1.A.vr3bk","requires":["yui2_5-dom","yui2_5-event","yui2_5-yahoo"],"ext":false},"worker-echo":{"path":"j\/.IW-echo.A.vWYgr","requires":["worker-yui-ready","yui-base"],"ext":false},"worker-thumbnail-extractor":{"path":"j\/.IW-.IM-.IN.A.vYnbx","requires":["better-throttle","exif-thumbnail-extractor","worker-yui-ready","yui-base"],"ext":false},"worker-exif-extractor":{"path":"j\/.IW-.GO-.IN.A.v23fNK","requires":["jfif-extractor","better-throttle","dataview","exif-extractor","exif-extractor-tags","worker-yui-ready","yui-base","xmp-extractor"],"ext":false},"worker-yui-ready":{"path":"j\/.IW-yui-ready.A.vWPcz","requires":["event","event-custom","yui-base"],"ext":false}}};
+
+	
+		
+	
+		
+	
+		
+
+	
+
+function clone(o) {
+	if (o === null || typeof o !== 'object') {
+		return o;
+	}
+	var c = new o.constructor();
+	for (var k in o) {
+		c[k] = clone(o[k]);
+	}
+	return c;
+}
+
+F.config = clone(yconf);		YUI(yconf).use(function (Y) {
+						Y.use('flickr-nav', 'rapid-tracker', 'nav-selecta-rapid', function(Y) {
+
+	Y.flickr_nav.init({
+				open_on_hover: false
+			});
+
+
+
+
+
+	var keys = {A_pn:'/about.gne'};
+	var conf = {
+			keys:keys, 
+			lt_attr:'data-track', 
+			client_only:1, 
+			spaceid:'792600056',
+
+			
+			
+			nofollow_class:["nav_more","signin-popup","rapidnofollow","contact-changer-trigger","personmenu-relationship-change"],
+			
+		
+
+			use_sampling:false,
+
+		
+
+	
+	
+
+			tracked_mods:[], 
+			track_lv:true
+		};
+		
+
+        
+        
+        
+        
+		
+		            conf.tracked_mods.push('head-logo');
+		            conf.tracked_mods.push('head-status');
+		            conf.tracked_mods.push('searchform');
+		            conf.tracked_mods.push('flickr_nav');
+		            conf.tracked_mods.push('photostream-subnav-normalized');
+		            conf.tracked_mods.push('my-photostream-subnav');
+		            conf.tracked_mods.push('nav-personmenu');
+			Y.config.flickr.rapidconf = conf;
+	Y.rapidTracker.init(conf);
+
+
+	
+});
+			Y.use('nav-selecta', 'popup-login', 'liquid-resizer', 'grease', 'flickr', 'comscore', function(Y) {
+
+	
+		var nav_selecta = new Y.NavSelecta('#nav-selecta-field', {linkUsernameToPhotostream:1});
+	
+	
+	Y.popup_login.init();
+
+			Y.liquidResizer.init();
+		
+	Y.grease.init(0);
+
+		Y.flickr();
+	
+	COMSCORE._flickrconf = { c1: 2, c2: 7241469, c3: "", c4: "www.flickr.com%2Fabout%2F", c5: "792600056", c6: "", c15: "" };
+	COMSCORE.beacon(COMSCORE._flickrconf);
+
+
+	
+});
+			
+		});
+	})();
+	</script>
+
+<noscript>
+
+	<img src="/web/20120516090317im_/http://b.scorecardresearch.com/b?c1=2&c2=7241469&c3=&c4=www.flickr.com%2Fabout%2F&c5=792600056&c6=&c15=&cv=1.3&cj=1" style="display:none" width="0" height="0" alt="" />
+</noscript>
+
+
+
+
+</body>
+</html>
+
+
+
+
+<!--
+     FILE ARCHIVED ON 9:03:17 May 16, 2012 AND RETRIEVED FROM THE
+     INTERNET ARCHIVE ON 8:34:53 Nov 1, 2013.
+     JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
+
+     ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
+     SECTION 108(a)(3)).
+-->
